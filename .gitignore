@@ -54,8 +54,7 @@ Thumbs.db
 # Sensitive files (auto-detected)
 node_modules
 
-# Database files
-db/pb_data/*.db
+# Database files (sadece runtime dosyaları)
 db/pb_data/*.db-shm
 db/pb_data/*.db-wal
 
