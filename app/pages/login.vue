@@ -45,6 +45,8 @@ async function handleLogin() {
   loading.value = true
   try {
     await login(email.value, password.value)
+    const router = useRouter()
+    await router.push('/admin')
   } catch {
   } finally {
     loading.value = false
