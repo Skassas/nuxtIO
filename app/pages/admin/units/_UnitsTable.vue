@@ -42,7 +42,7 @@
     <div class="flex items-center gap-2">
       <button :disabled="currentPage <= 1" @click="$emit('prevPage')"
         class="rounded-lg border border-gray-300 bg-white px-3 py-1.5 text-sm text-gray-700 disabled:border-gray-200 disabled:bg-gray-100 disabled:text-gray-400 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:disabled:border-gray-600 dark:disabled:bg-gray-800 dark:disabled:text-gray-500">
-        Onceki
+        Önceki
       </button>
       <span class="text-sm text-gray-600 dark:text-gray-400">{{ currentPage }} / {{ totalPages }}</span>
       <button :disabled="currentPage >= totalPages" @click="$emit('nextPage')"

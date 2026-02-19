@@ -123,9 +123,7 @@ export function useFileManager() {
   }
 
   const getFileUrl = (file: FmFile) => {
-    const config = useRuntimeConfig()
-    const baseUrl = config.public.pocketbaseUrl
-    return `${baseUrl}/api/files/fm_files/${file.id}/${file.file}`
+    return `/api/filemanager/files/preview/${file.id}`
   }
 
   const goBack = async () => {

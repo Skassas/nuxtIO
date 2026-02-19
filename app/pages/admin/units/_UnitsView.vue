@@ -1,19 +1,19 @@
 <template>
   <div class="space-y-4">
     <div>
-      <label class="text-sm font-medium text-gray-500 dark:text-gray-400">Birim Adi</label>
+      <label class="text-sm font-medium text-gray-500 dark:text-gray-400">Birim Adı</label>
       <p class="mt-1 text-gray-800 dark:text-white">{{ unit?.name }}</p>
     </div>
     <div>
-      <label class="text-sm font-medium text-gray-500 dark:text-gray-400">Aciklama</label>
+      <label class="text-sm font-medium text-gray-500 dark:text-gray-400">Açıklama</label>
       <p class="mt-1 text-gray-800 dark:text-white">{{ unit?.description || '-' }}</p>
     </div>
     <div>
-      <label class="text-sm font-medium text-gray-500 dark:text-gray-400">Olusturulma Tarihi</label>
+      <label class="text-sm font-medium text-gray-500 dark:text-gray-400">Oluşturulma Tarihi</label>
       <p class="mt-1 text-gray-800 dark:text-white">{{ formatDate(unit?.created) }}</p>
     </div>
     <div>
-      <label class="text-sm font-medium text-gray-500 dark:text-gray-400">Son Guncelleme</label>
+      <label class="text-sm font-medium text-gray-500 dark:text-gray-400">Son Güncelleme</label>
       <p class="mt-1 text-gray-800 dark:text-white">{{ formatDate(unit?.updated) }}</p>
     </div>
   </div>

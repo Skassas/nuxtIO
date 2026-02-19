@@ -109,7 +109,14 @@ export const useFileManagerDrawer = () => {
 
   const handleImageError = (e: Event) => {
     const img = e.target as HTMLImageElement
-    img.src = 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI2NCIgaGVpZ2h0PSI2NCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSIjZTllOWU5IiBzdHJva2U9IiM5Y2EzYWYiIHN0cm9rZS13aWR0aD0iMSI+PHJlY3QgeD0iMyIgeT0iMyIgd2lkdGg9IjE4IiBoZWlnaHQ9IjE4IiByeD0iMiIgcnk9IjIiPjwvcmVjdD48cGF0aCBkPSJNMTIgMmwyIDNhNCA0IDAgMCAxIDQgNGgtOGMtMS4xIDAtMiAuOS0yIDJyLjktMiAyLTJ6bTAgMTZhNCA0IDAgMSAxIDQtNGgtOHYtM2g4YTIgMiAwIDAgMiAydjJ6bTAgN2gtOHYzSDl2LTJoOHYyeiIvPjwvc3ZnPg=='
+    img.style.display = 'none'
+    const parent = img.parentElement
+    if (parent) {
+      const iconDiv = document.createElement('div')
+      iconDiv.className = 'w-[4.5rem] h-[4.5rem] flex items-center justify-center bg-gray-100 rounded'
+      iconDiv.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-8 h-8 text-gray-400"><path stroke-linecap="round" stroke-linejoin="round" d="m2.25 15.75 5.159-5.159a2.25 2.25 0 0 1 3.182 0l5.159 5.159m-1.5-1.5 1.409-1.409a2.25 2.25 0 0 1 3.182 0l2.909 2.909m-18 3.75h16.5a2.25 2.25 0 0 0 2.25-2.25V6a2.25 2.25 0 0 0-2.25-2.25H3.75A2.25 2.25 0 0 0 1.5 6v12a2.25 2.25 0 0 0 2.25 2.25Z" /></svg>`
+      parent.insertBefore(iconDiv, img)
+    }
   }
 
   const prevImage = () => {

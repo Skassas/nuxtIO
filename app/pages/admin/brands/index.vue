@@ -39,11 +39,11 @@
           <template v-else>
             <button type="submit" form="brand-form" :disabled="saving"
               class="w-24 py-1.5 text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 disabled:opacity-50">
-              {{ saving ? 'Kaydediliyor...' : drawerMode === 'edit' ? 'Guncelle' : 'Kaydet' }}
+              {{ saving ? 'Kaydediliyor...' : drawerMode === 'edit' ? 'Güncelle' : 'Kaydet' }}
             </button>
             <button type="button" @click="closeDrawer"
               class="px-4 py-1.5 text-sm font-medium text-gray-700 border border-gray-300 hover:bg-gray-50 dark:border-gray-600 dark:text-gray-300 dark:hover:bg-gray-700">
-              Iptal
+              İptal
             </button>
           </template>
         </div>

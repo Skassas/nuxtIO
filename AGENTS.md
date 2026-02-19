@@ -34,3 +34,4 @@
 
 ## Iconlar&Simgeler
 - Aksi belirtilmedikçe ihtiyaç duyulan icon lar app/assets/icon dizini altında svg formatındakiler ise app/assets/svg altında yaratılsın. Buradan çağrılsın.
+- Yeni bir icon veya simge yaratmadan önce app/assets/svg klasörü altına bakılsın. Varsa buradaki kullanılsın.

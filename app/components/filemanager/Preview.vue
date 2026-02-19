@@ -24,7 +24,7 @@
       
       <div class="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-2">
         <button v-if="props.selectMode" @click="handleSelectInPreview" class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 flex items-center gap-2">
-          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" /></svg>
+          <FilemanagerSvgCheck class="w-4 h-4" />
           Seç
         </button>
         <button @click="closePreview" class="px-4 py-2 bg-gray-600 text-white rounded hover:bg-gray-700 flex items-center gap-2">
@@ -37,6 +37,7 @@
 </template>
 
 <script setup lang="ts">
+
 import { useFileManagerDrawer } from '~/composables/useFileManagerDrawer'
 
 const props = defineProps<{ selectMode?: boolean }>()

@@ -11,9 +11,7 @@
             </h2>
             <button @click="$emit('close')"
               class="rounded-lg p-1 text-gray-400 hover:bg-gray-100 hover:text-gray-600 dark:hover:bg-gray-700">
-              <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-              </svg>
+              <CloseIcon class="h-6 w-6" />
             </button>
           </div>
           <div class="flex-1 overflow-y-auto p-6">
@@ -30,6 +28,7 @@
 
 <script setup lang="ts">
 import type { Component } from 'vue'
+import CloseIcon from '~/assets/svg/CloseIcon.vue'
 
 defineProps<{
   isOpen: boolean

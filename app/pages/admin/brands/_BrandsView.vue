@@ -7,19 +7,19 @@
       </div>
     </div>
     <div>
-      <label class="text-sm font-medium text-gray-500 dark:text-gray-400">Marka Adi</label>
+      <label class="text-sm font-medium text-gray-500 dark:text-gray-400">Marka Adı</label>
       <p class="mt-1 text-gray-800 dark:text-white">{{ brand?.name }}</p>
     </div>
     <div>
-      <label class="text-sm font-medium text-gray-500 dark:text-gray-400">Aciklama</label>
+      <label class="text-sm font-medium text-gray-500 dark:text-gray-400">Açıklama</label>
       <p class="mt-1 text-gray-800 dark:text-white">{{ brand?.description || '-' }}</p>
     </div>
     <div>
-      <label class="text-sm font-medium text-gray-500 dark:text-gray-400">Olusturulma Tarihi</label>
+      <label class="text-sm font-medium text-gray-500 dark:text-gray-400">Oluşturulma Tarihi</label>
       <p class="mt-1 text-gray-800 dark:text-white">{{ formatDate(brand?.created) }}</p>
     </div>
     <div>
-      <label class="text-sm font-medium text-gray-500 dark:text-gray-400">Son Guncelleme</label>
+      <label class="text-sm font-medium text-gray-500 dark:text-gray-400">Son Güncelleme</label>
       <p class="mt-1 text-gray-800 dark:text-white">{{ formatDate(brand?.updated) }}</p>
     </div>
   </div>
