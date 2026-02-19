@@ -7,6 +7,7 @@ interface UseCrudOptions<T> {
   validationSchema: z.ZodSchema
   itemName: string
   icon?: Component
+  perPage?: number
 }
 
 interface UseCrudReturn<T> {
@@ -47,7 +48,7 @@ export function useCrud<T extends Record<string, any>>(
   const loading = ref(false)
   const searchQuery = ref('')
   const currentPage = ref(1)
-  const perPage = 9
+  const perPage = options.perPage ?? 9
   const totalPages = ref(1)
   const totalItems = ref(0)
   const sortBy = ref<'name' | 'created'>('name')
@@ -69,7 +70,6 @@ export function useCrud<T extends Record<string, any>>(
   let searchTimeout: ReturnType<typeof setTimeout>
   watch(searchQuery, (newVal) => {
     clearTimeout(searchTimeout)
-    if (!newVal.trim()) return
     searchTimeout = setTimeout(() => {
       currentPage.value = 1
       fetchItems()
@@ -80,7 +80,6 @@ export function useCrud<T extends Record<string, any>>(
 
   async function search() {
     clearTimeout(searchTimeout)
-    if (!searchQuery.value.trim()) return
     currentPage.value = 1
     await fetchItems()
   }
