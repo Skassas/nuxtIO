@@ -25,7 +25,7 @@
       :sort-by="sortBy" :sort-order="sortOrder"
       @view="openViewDrawer" @edit="openEditDrawer" @delete="handleDelete" @prev-page="currentPage--" @next-page="currentPage++" @sort="setSort" />
 
-    <AdminDrawer :isOpen="drawerOpen" :title="drawerTitle" @close="closeDrawer">
+    <AdminDrawer :isOpen="drawerOpen" :title="drawerTitle" :icon="drawerIcon" @close="closeDrawer">
       <BrandsView v-if="drawerMode === 'view'" :brand="selectedItem" />
       <BrandsForm v-else v-model="form" :errors="formErrors" @submit="handleBrandSubmit" />
       <template #footer>
@@ -55,6 +55,7 @@
 <script setup lang="ts">
 import PlusIcon from '~/assets/svg/PlusIcon.vue'
 import SearchIcon from '~/assets/svg/SearchIcon.vue'
+import BrandIcon from '~/assets/svg/BrandIcon.vue'
 import BrandsTable from './_BrandsTable.vue'
 import BrandsForm from './_BrandsForm.vue'
 import BrandsView from './_BrandsView.vue'
@@ -87,6 +88,7 @@ const {
   formErrors,
   saving,
   drawerTitle,
+  drawerIcon,
   fetchItems,
   search,
   setSort,
@@ -101,6 +103,7 @@ const {
   defaultForm: { name: '', description: '', image: '' },
   validationSchema: brandSchema,
   itemName: 'Marka',
+  icon: BrandIcon,
 })
 
 async function handleBrandSubmit() {

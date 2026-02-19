@@ -1,10 +1,12 @@
 import { z } from 'zod'
+import type { Component } from 'vue'
 
 interface UseCrudOptions<T> {
   endpoint: string
   defaultForm: T
   validationSchema: z.ZodSchema
   itemName: string
+  icon?: Component
 }
 
 interface UseCrudReturn<T> {
@@ -24,6 +26,7 @@ interface UseCrudReturn<T> {
   formErrors: Ref<Record<string, string>>
   saving: Ref<boolean>
   drawerTitle: ComputedRef<string>
+  drawerIcon: Component | undefined
   fetchItems: () => Promise<void>
   openCreateDrawer: () => void
   openViewDrawer: (item: T) => void
@@ -222,6 +225,7 @@ export function useCrud<T extends Record<string, any>>(
     formErrors,
     saving,
     drawerTitle,
+    drawerIcon: options.icon,
     fetchItems,
     search,
     setSort,

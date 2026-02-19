@@ -25,7 +25,7 @@
       :sort-by="sortBy" :sort-order="sortOrder"
       @view="openViewDrawer" @edit="openEditDrawer" @delete="handleDelete" @prev-page="currentPage--" @next-page="currentPage++" @sort="setSort" />
 
-    <AdminDrawer :isOpen="drawerOpen" :title="drawerTitle" @close="closeDrawer">
+    <AdminDrawer :isOpen="drawerOpen" :title="drawerTitle" :icon="drawerIcon" @close="closeDrawer">
       <UnitsView v-if="drawerMode === 'view'" :unit="selectedItem" />
       <UnitsForm v-else v-model="form" :errors="formErrors" @submit="handleSubmit" />
       <template #footer>
@@ -55,6 +55,7 @@
 <script setup lang="ts">
 import PlusIcon from '~/assets/svg/PlusIcon.vue'
 import SearchIcon from '~/assets/svg/SearchIcon.vue'
+import UnitIcon from '~/assets/svg/UnitIcon.vue'
 import UnitsTable from './_UnitsTable.vue'
 import UnitsForm from './_UnitsForm.vue'
 import UnitsView from './_UnitsView.vue'
@@ -81,6 +82,7 @@ const {
   formErrors,
   saving,
   drawerTitle,
+  drawerIcon,
   fetchItems,
   search,
   setSort,
@@ -95,6 +97,7 @@ const {
   defaultForm: { name: '', description: '' },
   validationSchema: unitSchema,
   itemName: 'Birim',
+  icon: UnitIcon,
 })
 
 onMounted(async () => {

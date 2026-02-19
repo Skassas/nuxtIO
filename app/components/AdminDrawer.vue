@@ -5,7 +5,10 @@
         <div class="absolute inset-0 bg-black/50" @click.self></div>
         <div class="absolute right-0 top-0 h-screen w-full max-w-[24rem] flex flex-col bg-white shadow-xl dark:bg-gray-800">
           <div class="flex items-center justify-between border-b border-gray-200 px-6 py-4 dark:border-gray-700">
-            <h2 class="text-lg font-semibold text-gray-800 dark:text-white">{{ title }}</h2>
+            <h2 class="flex items-center gap-2 text-base font-semibold text-gray-800 dark:text-white">
+              <component v-if="icon" :is="icon" class="size-4 text-blue-600 dark:text-blue-400" />
+              {{ title }}
+            </h2>
             <button @click="$emit('close')"
               class="rounded-lg p-1 text-gray-400 hover:bg-gray-100 hover:text-gray-600 dark:hover:bg-gray-700">
               <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -26,9 +29,12 @@
 </template>
 
 <script setup lang="ts">
+import type { Component } from 'vue'
+
 defineProps<{
   isOpen: boolean
   title: string
+  icon?: Component
 }>()
 
 defineEmits<{

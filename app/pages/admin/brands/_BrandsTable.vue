@@ -4,7 +4,7 @@
       <thead class="bg-gray-50 dark:bg-gray-700">
         <tr>
           <th class="px-4 py-4 font-semibold text-gray-600 dark:text-gray-300 w-16 uppercase text-xs text-center">Sıra</th>
-          <th class="px-4 py-4 font-semibold text-gray-600 dark:text-gray-300 w-20 uppercase text-xs text-center">Resim</th>
+          <th class="px-4 py-4 font-semibold text-gray-600 dark:text-gray-300 w-24 uppercase text-xs text-left">Resim</th>
           <th class="px-4 py-4 font-semibold text-gray-600 dark:text-gray-300 uppercase text-xs align-middle" @click="$emit('sort', 'name')">
             <span class="inline-flex items-center gap-1 cursor-pointer hover:text-blue-600 dark:hover:text-blue-400">
               <SortIcon :active="sortBy === 'name'" :direction="sortBy === 'name' ? sortOrder : null" class="w-4 h-4" />
@@ -23,16 +23,16 @@
           <td colspan="5" class="px-4 py-8 text-gray-500 dark:text-gray-400">Marka bulunamadı</td>
         </tr>
         <tr v-for="(brand, index) in brands" :key="brand.id" class="hover:bg-gray-100 dark:hover:bg-gray-700">
-          <td class="px-4 py-3 text-gray-700 dark:text-gray-300">{{ (currentPage - 1) * perPage + index + 1 }}</td>
-          <td class="px-4 py-3">
-            <img v-if="brand.image" :src="getImageUrl(brand.image)" alt="" class="h-8 w-8 rounded object-cover" />
-            <div v-else class="h-8 w-8 rounded bg-gray-200 dark:bg-gray-700 flex items-center justify-center">
-              <ImageIcon class="text-gray-400" />
+          <td class="px-4 py-1.5 text-gray-700 dark:text-gray-300 text-center">{{ (currentPage - 1) * perPage + index + 1 }}</td>
+          <td class="px-4 py-1.5">
+            <img v-if="brand.image" :src="getImageUrl(brand.image)" alt="" class="h-10 w-10 rounded-lg border border-gray-200 object-cover dark:border-gray-600" />
+            <div v-else class="h-10 w-10 rounded-lg border border-gray-200 bg-gray-200 dark:bg-gray-700 dark:border-gray-600 flex items-center justify-center">
+              <ImageIcon class="text-gray-400 h-5 w-5" />
             </div>
           </td>
-          <td class="px-4 py-3 text-gray-800 dark:text-white">{{ brand.name }}</td>
-          <td class="px-4 py-3 text-gray-600 dark:text-gray-400">{{ brand.description || '-' }}</td>
-          <td class="px-4 py-2">
+          <td class="px-4 py-1.5 text-gray-800 dark:text-white">{{ brand.name }}</td>
+          <td class="px-4 py-1.5 text-gray-600 dark:text-gray-400">{{ brand.description || '-' }}</td>
+          <td class="px-4 py-1.5">
             <div class="flex items-center justify-center gap-1">
               <ViewButton @click="$emit('view', brand)" />
               <EditButton @click="$emit('edit', brand)" />

@@ -6,11 +6,9 @@
     open ? 'translate-x-0' : '-translate-x-full'
   ]">
     <div class="flex h-14 shrink-0 items-center justify-between border-b border-slate-700 px-4">
-      <span class="text-lg font-bold text-white">Yonetim Paneli</span>
+      <span class="text-lg font-bold text-white">Yönetim Paneli</span>
       <button @click="$emit('close')" class="rounded p-1 text-slate-400 hover:text-white lg:hidden">
-        <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-        </svg>
+        <CloseIcon class="h-5 w-5" />
       </button>
     </div>
 
@@ -25,11 +23,9 @@
             class="flex items-center gap-3 px-4 py-2.5 text-sm transition-colors hover:bg-slate-700"
             :class="isActive(item.path) ? 'bg-slate-700 border-l-4 border-blue-400 text-white' : 'text-slate-300'"
             @click="closeMobile">
-            <span v-html="item.icon" class="h-5 w-5 flex-shrink-0"></span>
+            <component :is="item.icon" class="h-5 w-5 flex-shrink-0" />
             <span>{{ item.label }}</span>
-            <svg v-if="item.children" class="ml-auto h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
-            </svg>
+            <ChevronRightIcon v-if="item.children" class="ml-auto h-4 w-4" />
           </NuxtLink>
           <div v-if="item.children && openSub === item.path"
             class="absolute left-full top-0 z-50 ml-0 w-48 rounded-r-lg bg-slate-700 py-1 shadow-lg">
@@ -46,6 +42,12 @@
 </template>
 
 <script setup lang="ts">
+import CategoryIcon from '~/assets/svg/CategoryIcon.vue'
+import UnitIcon from '~/assets/svg/UnitIcon.vue'
+import TagIcon from '~/assets/svg/TagIcon.vue'
+import CloseIcon from '~/assets/svg/CloseIcon.vue'
+import ChevronRightIcon from '~/assets/svg/ChevronRightIcon.vue'
+
 const props = defineProps<{ open: boolean }>()
 const emit = defineEmits<{ close: [] }>()
 
@@ -61,7 +63,7 @@ function closeMobile() {
 interface MenuItem {
   label: string
   path: string
-  icon: string
+  icon: typeof CategoryIcon
   children?: { label: string; path: string }[]
 }
 
@@ -77,17 +79,17 @@ const menuGroups: MenuGroup[] = [
       {
         label: 'Kategoriler',
         path: '/admin/categories',
-        icon: '<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" class="w-5 h-5"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z"/></svg>',
+        icon: CategoryIcon,
       },
       {
         label: 'Birimler',
         path: '/admin/units',
-        icon: '<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" class="w-5 h-5"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"/></svg>',
+        icon: UnitIcon,
       },
       {
         label: 'Markalar',
         path: '/admin/brands',
-        icon: '<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" class="w-5 h-5"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A2 2 0 013 12V7a4 4 0 014-4z"/></svg>',
+        icon: TagIcon,
       },
     ],
   },

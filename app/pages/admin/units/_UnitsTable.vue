@@ -22,9 +22,9 @@
           <td colspan="4" class="px-4 py-8 text-gray-500 dark:text-gray-400">Birim bulunamadı</td>
         </tr>
         <tr v-for="(unit, index) in units" :key="unit.id" class="hover:bg-gray-100 dark:hover:bg-gray-700">
-          <td class="px-4 py-3 text-gray-700 dark:text-gray-300">{{ (currentPage - 1) * perPage + index + 1 }}</td>
-          <td class="px-4 py-3 text-gray-800 dark:text-white">{{ unit.name }}</td>
-          <td class="px-4 py-3 text-gray-600 dark:text-gray-400">{{ unit.description || '-' }}</td>
+          <td class="px-4 py-2 text-gray-700 dark:text-gray-300 text-center">{{ (currentPage - 1) * perPage + index + 1 }}</td>
+          <td class="px-4 py-2 text-gray-800 dark:text-white">{{ unit.name }}</td>
+          <td class="px-4 py-2 text-gray-600 dark:text-gray-400">{{ unit.description || '-' }}</td>
           <td class="px-4 py-2">
             <div class="flex items-center justify-center gap-1">
               <ViewButton @click="$emit('view', unit)" />
