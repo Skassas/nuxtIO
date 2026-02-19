@@ -5,8 +5,9 @@
 - Değişiklikleri commit etmeden önce kullanıcıya sor.
 
 ## Database Dosyaları
-- `db/pb_data/` klasöründeki database dosyalarını **asla commit etme**.
-- Bu dosyalar .gitignore'da olmalı.
+- **BU PROJE İÇİN GEÇERLİ DEĞİL**: Kullanıcı GitHub'ı yedek olarak kullanıyor, kodlar public olunca silinecek.
+- Normalde: `db/pb_data/` klasöründeki database dosyalarını **asla commit etme**.
+- Normalde: Bu dosyalar .gitignore'da olmalı.
 
 ## API Routes Yapısı
 - Admin panel API'leri: `server/api/admin/` altında
@@ -30,3 +31,6 @@
 
 ## PocketBase Forntend Kullanımı
 - PocketBase kesinlikle Forntend üzerinden çağrılmayacak. Frontend -> Backend -> PocketBase üzerinden çağrılacak.
+
+## Iconlar&Simgeler
+- Aksi belirtilmedikçe ihtiyaç duyulan icon lar app/assets/icon dizini altında svg formatındakiler ise app/assets/svg altında yaratılsın. Buradan çağrılsın.

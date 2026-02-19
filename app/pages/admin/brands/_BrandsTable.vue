@@ -3,11 +3,16 @@
     <table class="w-full text-left text-sm">
       <thead class="bg-gray-50 dark:bg-gray-700">
         <tr>
-          <th class="px-4 py-2 font-medium text-gray-600 dark:text-gray-300 w-16">Sıra</th>
-          <th class="px-4 py-2 font-medium text-gray-600 dark:text-gray-300 w-20">Resim</th>
-          <th class="px-4 py-2 font-medium text-gray-600 dark:text-gray-300">Marka Adı</th>
-          <th class="px-4 py-2 font-medium text-gray-600 dark:text-gray-300">Açıklama</th>
-          <th class="px-4 py-2 font-medium text-gray-600 dark:text-gray-300 w-40 text-center"></th>
+          <th class="px-4 py-4 font-semibold text-gray-600 dark:text-gray-300 w-16 uppercase text-xs text-center">Sıra</th>
+          <th class="px-4 py-4 font-semibold text-gray-600 dark:text-gray-300 w-20 uppercase text-xs text-center">Resim</th>
+          <th class="px-4 py-4 font-semibold text-gray-600 dark:text-gray-300 uppercase text-xs align-middle" @click="$emit('sort', 'name')">
+            <span class="inline-flex items-center gap-1 cursor-pointer hover:text-blue-600 dark:hover:text-blue-400">
+              <SortIcon :active="sortBy === 'name'" :direction="sortBy === 'name' ? sortOrder : null" class="w-4 h-4" />
+              <span>Marka Adı</span>
+            </span>
+          </th>
+          <th class="px-4 py-4 font-semibold text-gray-600 dark:text-gray-300 uppercase text-xs">Açıklama</th>
+          <th class="px-4 py-4 font-semibold text-gray-600 dark:text-gray-300 w-40 text-center uppercase text-xs"></th>
         </tr>
       </thead>
       <tbody class="divide-y divide-gray-200 dark:divide-gray-700">
@@ -18,15 +23,15 @@
           <td colspan="5" class="px-4 py-8 text-gray-500 dark:text-gray-400">Marka bulunamadı</td>
         </tr>
         <tr v-for="(brand, index) in brands" :key="brand.id" class="hover:bg-gray-100 dark:hover:bg-gray-700">
-          <td class="px-4 py-2 text-gray-700 dark:text-gray-300">{{ (currentPage - 1) * perPage + index + 1 }}</td>
-          <td class="px-4 py-2">
+          <td class="px-4 py-3 text-gray-700 dark:text-gray-300">{{ (currentPage - 1) * perPage + index + 1 }}</td>
+          <td class="px-4 py-3">
             <img v-if="brand.image" :src="getImageUrl(brand.image)" alt="" class="h-8 w-8 rounded object-cover" />
             <div v-else class="h-8 w-8 rounded bg-gray-200 dark:bg-gray-700 flex items-center justify-center">
               <ImageIcon class="text-gray-400" />
             </div>
           </td>
-          <td class="px-4 py-2 font-medium text-gray-800 dark:text-white">{{ brand.name }}</td>
-          <td class="px-4 py-2 text-gray-600 dark:text-gray-400">{{ brand.description || '-' }}</td>
+          <td class="px-4 py-3 text-gray-800 dark:text-white">{{ brand.name }}</td>
+          <td class="px-4 py-3 text-gray-600 dark:text-gray-400">{{ brand.description || '-' }}</td>
           <td class="px-4 py-2">
             <div class="flex items-center justify-center gap-1">
               <ViewButton @click="$emit('view', brand)" />
@@ -39,21 +44,25 @@
     </table>
   </div>
 
-  <div class="mt-4 flex items-center justify-end gap-2">
-    <button :disabled="currentPage <= 1" @click="$emit('prevPage')"
-      class="rounded-lg border border-gray-300 px-3 py-1.5 text-sm disabled:opacity-50 dark:border-gray-600 dark:text-gray-300">
-      Onceki
-    </button>
-    <span class="text-sm text-gray-600 dark:text-gray-400">{{ currentPage }} / {{ totalPages }}</span>
-    <button :disabled="currentPage >= totalPages" @click="$emit('nextPage')"
-      class="rounded-lg border border-gray-300 px-3 py-1.5 text-sm disabled:opacity-50 dark:border-gray-600 dark:text-gray-300">
-      Sonraki
-    </button>
+  <div class="mt-4 flex items-center justify-between">
+    <span class="text-sm text-gray-600 dark:text-gray-400">Toplam: {{ totalItems }} kayıt</span>
+    <div class="flex items-center gap-2">
+      <button :disabled="currentPage <= 1" @click="$emit('prevPage')"
+        class="rounded-lg border border-gray-300 bg-white px-3 py-1.5 text-sm text-gray-700 disabled:border-gray-200 disabled:bg-gray-100 disabled:text-gray-400 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:disabled:border-gray-600 dark:disabled:bg-gray-800 dark:disabled:text-gray-500">
+        Onceki
+      </button>
+      <span class="text-sm text-gray-600 dark:text-gray-400">{{ currentPage }} / {{ totalPages }}</span>
+      <button :disabled="currentPage >= totalPages" @click="$emit('nextPage')"
+        class="rounded-lg border border-gray-300 bg-white px-3 py-1.5 text-sm text-gray-700 disabled:border-gray-200 disabled:bg-gray-100 disabled:text-gray-400 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:disabled:border-gray-600 dark:disabled:bg-gray-800 dark:disabled:text-gray-500">
+        Sonraki
+      </button>
+    </div>
   </div>
 </template>
 
 <script setup lang="ts">
 import ImageIcon from '~/assets/svg/ImageIcon.vue'
+import SortIcon from '~/assets/svg/SortIcon.vue'
 
 export interface Brand {
   id: string
@@ -70,6 +79,9 @@ const props = defineProps<{
   currentPage: number
   totalPages: number
   perPage: number
+  totalItems: number
+  sortBy: 'name' | 'created'
+  sortOrder: 'asc' | 'desc'
 }>()
 
 defineEmits<{
@@ -78,6 +90,7 @@ defineEmits<{
   delete: [id: string]
   prevPage: []
   nextPage: []
+  sort: [field: 'name' | 'created']
 }>()
 
 function getImageUrl(imageId: string) {

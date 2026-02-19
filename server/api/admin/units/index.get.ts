@@ -5,10 +5,11 @@ export default defineEventHandler(async (event) => {
   const page = Number(query.page) || 1
   const perPage = Number(query.perPage) || 20
   const search = (query.search as string) || ''
+  const sort = (query.sort as string) || '-created'
 
   try {
     const result = await pb.collection('units').getList(page, perPage, {
-      sort: '-created',
+      sort,
       filter: search ? `name ~ "${search}" || description ~ "${search}"` : '',
     })
     return result
