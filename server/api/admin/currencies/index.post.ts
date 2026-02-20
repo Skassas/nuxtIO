@@ -1,4 +1,4 @@
-import { locationSchema } from '../../../validations/locations'
+import { currencySchema } from '../../../validations/currencies'
 
 function normalizeForSearch(text: string): string {
   const turkishChars: Record<string, string> = {
@@ -18,40 +18,38 @@ function normalizeForSearch(text: string): string {
 
 export default defineEventHandler(async (event) => {
   const pb = await createPBAdminClient()
-  const id = getRouterParam(event, 'id')
   const body = await readBody(event)
 
-  if (!id) {
-    throw createError({
-      statusCode: 400,
-      data: { error: 'VALIDATION_ERROR', message: 'Mağaza ID belirtilmelidir' },
-    })
-  }
+  console.log('[currencies post] body:', JSON.stringify(body))
 
   try {
-    locationSchema.parse(body)
+    currencySchema.parse(body)
   } catch (error: any) {
-    const firstError = error.errors[0]
+    console.log('[currencies post] validation error:', error)
+    const zodError = error.errors || error.issues || []
+    const firstError = zodError[0]
     throw createError({
       statusCode: 400,
-      data: { error: 'VALIDATION_ERROR', message: firstError.message },
+      data: { error: 'VALIDATION_ERROR', message: firstError?.message || 'Validasyon hatası' },
     })
   }
 
-  const name = body.name?.trim() || ''
+  const name = body.currencyName?.trim() || ''
   const searchIndex = normalizeForSearch(name)
 
   try {
-    const record = await pb.collection('locations').update(id, {
-      name: name,
-      description: body.description?.trim() || '',
+    const record = await pb.collection('currencies').create({
+      currency_name: body.currencyName?.trim() || '',
+      currency_code: body.currencyCode?.trim() || '',
+      currency_symbol: body.currencySymbol?.trim() || '',
+      currency_value: body.currencyValue?.trim() || '',
       search_index: searchIndex,
     })
     return record
   } catch (err: any) {
     throw createError({
       statusCode: 500,
-      data: { error: 'SERVER_ERROR', message: 'Mağaza güncellenirken bir hata oluştu' },
+      data: { error: 'SERVER_ERROR', message: 'Para birimi oluşturulurken bir hata oluştu' },
     })
   }
 })

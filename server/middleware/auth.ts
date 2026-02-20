@@ -7,6 +7,10 @@ export default defineEventHandler(async (event: H3Event) => {
     return
   }
 
+  if (url.pathname.startsWith('/api/admin/currencies/sync')) {
+    return
+  }
+
   if (!url.pathname.startsWith('/api/')) {
     return
   }

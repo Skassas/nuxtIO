@@ -7,29 +7,43 @@
           <th class="px-4 py-4 font-semibold text-gray-800 dark:text-gray-200 uppercase text-xs align-middle" @click="$emit('sort', 'name')">
             <span class="inline-flex items-center gap-1 cursor-pointer hover:text-blue-600 dark:hover:text-blue-400">
               <SortIcon :active="sortBy === 'name'" :direction="sortBy === 'name' ? sortOrder : null" class="w-4 h-4" />
-              <span>Mağaza Adı</span>
+              <span>Para Birimi</span>
             </span>
           </th>
-          <th class="px-4 py-4 font-semibold text-gray-800 dark:text-gray-200 uppercase text-xs">Açıklama</th>
+          <th class="px-4 py-4 font-semibold text-gray-800 dark:text-gray-200 uppercase text-xs align-middle" @click="$emit('sort', 'currency_code')">
+            <span class="inline-flex items-center gap-1 cursor-pointer hover:text-blue-600 dark:hover:text-blue-400">
+              <SortIcon :active="sortBy === 'currency_code'" :direction="sortBy === 'currency_code' ? sortOrder : null" class="w-4 h-4" />
+              <span>Uluslararası Kodu</span>
+            </span>
+          </th>
+          <th class="px-4 py-4 font-semibold text-gray-800 dark:text-gray-200 uppercase text-xs align-middle" @click="$emit('sort', 'currency_symbol')">
+            <span class="inline-flex items-center gap-1 cursor-pointer hover:text-blue-600 dark:hover:text-blue-400">
+              <SortIcon :active="sortBy === 'currency_symbol'" :direction="sortBy === 'currency_symbol' ? sortOrder : null" class="w-4 h-4" />
+              <span>Sembolü</span>
+            </span>
+          </th>
+          <th class="px-4 py-4 font-semibold text-gray-800 dark:text-gray-200 uppercase text-xs">Değeri</th>
           <th class="px-4 py-4 font-semibold text-gray-800 dark:text-gray-200 w-40 text-center uppercase text-xs"></th>
         </tr>
       </thead>
       <tbody class="divide-y divide-gray-200 dark:divide-gray-700">
         <tr v-if="loading" class="text-center">
-          <td colspan="4" class="px-4 py-8 text-gray-500 dark:text-gray-400">Yükleniyor...</td>
+          <td colspan="6" class="px-4 py-8 text-gray-500 dark:text-gray-400">Yükleniyor...</td>
         </tr>
-        <tr v-else-if="!locations.length" class="text-center">
-          <td colspan="4" class="px-4 py-8 text-gray-500 dark:text-gray-400">Mağaza bulunamadı</td>
+        <tr v-else-if="!currencies.length" class="text-center">
+          <td colspan="6" class="px-4 py-8 text-gray-500 dark:text-gray-400">Para birimi bulunamadı</td>
         </tr>
-        <tr v-for="(location, index) in locations" :key="location.id" class="hover:bg-gray-100 dark:hover:bg-gray-700">
+        <tr v-for="(currency, index) in currencies" :key="currency.id" class="hover:bg-gray-100 dark:hover:bg-gray-700">
           <td class="px-4 py-1 text-gray-700 dark:text-gray-300 text-center">{{ (currentPage - 1) * perPage + index + 1 }}</td>
-          <td class="px-4 py-1 text-gray-800 dark:text-white">{{ location.name }}</td>
-          <td class="px-4 py-1 text-gray-600 dark:text-gray-400">{{ location.description || '-' }}</td>
+          <td class="px-4 py-1 text-gray-800 dark:text-white">{{ currency.currency_name }}</td>
+          <td class="px-4 py-1 text-gray-800 dark:text-white">{{ currency.currency_code }}</td>
+          <td class="px-4 py-1 text-gray-800 dark:text-white">{{ currency.currency_symbol }}</td>
+          <td class="px-4 py-1 text-gray-800 dark:text-white">₺{{ currency.currency_value }}</td>
           <td class="px-4 py-1">
             <div class="flex items-center justify-center gap-1">
-              <ViewButton @click="$emit('view', location)" />
-              <EditButton @click="$emit('edit', location)" />
-              <DeleteButton :item-id="location.id" :item-name="location.name" :on-delete="(id) => $emit('delete', id)" />
+              <ViewButton @click="$emit('view', currency)" />
+              <EditButton @click="$emit('edit', currency)" />
+              <DeleteButton :item-id="currency.id" :item-name="currency.currency_name" :on-delete="(id) => $emit('delete', id)" />
             </div>
           </td>
         </tr>
@@ -56,16 +70,18 @@
 <script setup lang="ts">
 import SortIcon from '~/assets/svg/SortIcon.vue'
 
-export interface Location {
+export interface Currency {
   id: string
-  name: string
-  description: string
+  currency_name: string
+  currency_code: string
+  currency_symbol: string
+  currency_value: string
   created: string
   updated: string
 }
 
 defineProps<{
-  locations: Location[]
+  currencies: Currency[]
   loading: boolean
   currentPage: number
   totalPages: number
@@ -76,8 +92,8 @@ defineProps<{
 }>()
 
 defineEmits<{
-  view: [location: Location]
-  edit: [location: Location]
+  view: [currency: Currency]
+  edit: [currency: Currency]
   delete: [id: string]
   prevPage: []
   nextPage: []

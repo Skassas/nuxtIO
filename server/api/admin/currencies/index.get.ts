@@ -41,19 +41,19 @@ export default defineEventHandler(async (event) => {
 
   try {
     const filter = search 
-      ? `(search_index ~ "${search.toLowerCase()}" || search_index ~ "${normalized}")` 
+      ? `(search_index ~ "${search.toLowerCase()}" || search_index ~ "${normalized}" || currency_code ~ "${search.toLowerCase()}" || currency_code ~ "${normalized}")` 
       : ''
     
-    const result = await pb.collection('locations').getList(page, perPage, {
+    const result = await pb.collection('currencies').getList(page, perPage, {
       sort,
       filter,
     })
     return result
   } catch (err: any) {
-    console.error('[locations/index.get] PB hata:', err?.message || err)
+    console.error('[currencies/index.get] PB hata:', err?.message || err)
     throw createError({
       statusCode: 500,
-      data: { error: 'SERVER_ERROR', message: 'Mağazalar getirilirken bir hata oluştu' },
+      data: { error: 'SERVER_ERROR', message: 'Para birimleri getirilirken bir hata oluştu' },
     })
   }
 })

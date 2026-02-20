@@ -7,7 +7,7 @@ export default defineEventHandler(async (event) => {
   if (!id) {
     throw createError({
       statusCode: 400,
-      data: { error: 'VALIDATION_ERROR', message: 'Konum ID belirtilmelidir' },
+      data: { error: 'VALIDATION_ERROR', message: 'Mağaza ID belirtilmelidir' },
     })
   }
 
@@ -17,7 +17,7 @@ export default defineEventHandler(async (event) => {
   } catch (err: any) {
     throw createError({
       statusCode: 500,
-      data: { error: 'SERVER_ERROR', message: 'Konum silinirken bir hata oluştu' },
+      data: { error: 'SERVER_ERROR', message: 'Mağaza silinirken bir hata oluştu' },
     })
   }
 })

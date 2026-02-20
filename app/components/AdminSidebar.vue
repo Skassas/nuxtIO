@@ -49,6 +49,7 @@ import ManufacturerIcon from '~/assets/svg/ManufacturerIcon.vue'
 import CustomerIcon from '~/assets/svg/CustomerIcon.vue'
 import TaxIcon from '~/assets/svg/TaxIcon.vue'
 import LocationIcon from '~/assets/svg/LocationIcon.vue'
+import CurrencyIcon from '~/assets/svg/CurrencyIcon.vue'
 import CloseIcon from '~/assets/svg/CloseIcon.vue'
 import ChevronRightIcon from '~/assets/svg/ChevronRightIcon.vue'
 
@@ -111,9 +112,14 @@ const menuGroups: MenuGroup[] = [
         icon: TaxIcon,
       },
       {
-        label: 'Konumlar',
+        label: 'Mağazalar',
         path: '/admin/locations',
         icon: LocationIcon,
+      },
+      {
+        label: 'Para Birimleri',
+        path: '/admin/currencies',
+        icon: CurrencyIcon,
       },
     ],
   },

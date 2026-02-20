@@ -127,17 +127,22 @@ function formatPhone(phone?: string) {
 ```
 
 ### Numeric Input (useNumericInput)
-Sadece rakam girişi için kullanılır (quantity, number, price, TCKN, vergi numarası gibi alanlarda).
+Sadece rakam girişi için kullanılır (quantity, number, price, TCKN, vergi numarası gibi alanlarda). İkinci parametre olarak istenilen karakterler eklenebilir.
 
 **Özellikler:**
 - Sadece 0-9 rakamları kullanılır
+- İkinci parametre ile ek karakterler desteklenir (örn: para birimi için '.,')
 
 **Kullanım:**
 ```vue
 <script setup>
 import { useNumericInput } from '~/composables/useNumericInput'
 
+// Normal kullanım
 const myField = useNumericInput(props.modelValue.myField?.toString() || '')
+
+// Ek karakter ile kullanım (örn: para birimi değeri için . ve ,)
+const valueField = useNumericInput(props.modelValue.value || '', '.,')
 
 watch(() => form.value.myField, (val) => {
   myField.inputValue.value = val?.toString() || ''

@@ -43,7 +43,7 @@ export default defineEventHandler(async (event) => {
   } catch (err: any) {
     throw createError({
       statusCode: 500,
-      data: { error: 'SERVER_ERROR', message: 'Konum oluşturulurken bir hata oluştu' },
+      data: { error: 'SERVER_ERROR', message: 'Mağaza oluşturulurken bir hata oluştu' },
     })
   }
 })

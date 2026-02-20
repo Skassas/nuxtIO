@@ -1,6 +1,19 @@
 import { z } from 'zod'
 import type { Component } from 'vue'
 
+function snakeToCamel(str: string): string {
+  return str.replace(/_([a-z])/g, (_, letter) => letter.toUpperCase())
+}
+
+function transformKeysToCamelCase<T>(obj: Record<string, any>): T {
+  const result: any = {}
+  for (const key in obj) {
+    const camelKey = snakeToCamel(key)
+    result[camelKey] = obj[key]
+  }
+  return result as T
+}
+
 interface UseCrudOptions<T> {
   endpoint: string
   defaultForm: T
@@ -167,7 +180,7 @@ export function useCrud<T extends Record<string, any>>(
   function openEditDrawer(item: T) {
     drawerMode.value = 'edit'
     selectedItem.value = item
-    form.value = { ...item }
+    form.value = transformKeysToCamelCase(item as any)
     formErrors.value = {}
     drawerOpen.value = true
   }

@@ -7,17 +7,17 @@ export default defineEventHandler(async (event) => {
   if (!id) {
     throw createError({
       statusCode: 400,
-      data: { error: 'VALIDATION_ERROR', message: 'Mağaza ID belirtilmelidir' },
+      data: { error: 'VALIDATION_ERROR', message: 'Para birimi ID belirtilmelidir' },
     })
   }
 
   try {
-    const record = await pb.collection('locations').getOne(id)
+    const record = await pb.collection('currencies').getOne(id)
     return record
   } catch (err: any) {
     throw createError({
       statusCode: 500,
-      data: { error: 'SERVER_ERROR', message: 'Mağaza getirilirken bir hata oluştu' },
+      data: { error: 'SERVER_ERROR', message: 'Para birimi getirilirken bir hata oluştu' },
     })
   }
 })
