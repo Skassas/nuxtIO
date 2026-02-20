@@ -145,11 +145,69 @@ watch(myField.inputValue, (val) => {
 <template>
   <input 
     :value="myField.inputValue.value" 
-    @input="(e) => { myField.handleInput(e); form.myField = myField.inputValue.value ? Number(myField.inputValue.value) : null }" 
+    @input="(e) => { myField.handleInput(e); form.myField = myField.inputValue.value }" 
     @keydown="myField.handleKeyDown" 
   />
 </template>
 ```
+
+## Yapılan Güncellemeler
+
+### Müşteriler (Customers) CRUD
+- `server/api/admin/customers/` dizini altında API endpoint'leri oluşturuldu
+- `app/pages/admin/customers/` dizini altında sayfalar oluşturuldu
+- `app/validations/customers.ts` validasyon dosyası eklendi
+- Bireysel ve Kurumsal müşteri tipleri destekleniyor
+- TCKN, vergi dairesi, vergi numarası gibi alanlar içerir
+
+### Türkçe Arama Sistemi (search_index)
+- PocketBase'de tüm collection'lara `search_index` alanı eklendi
+- `normalizeForSearch` fonksiyonu ile Türkçe karakterler normalize ediliyor (ç->c, ğ->g, ı->i, ö->o, ş->s, ü->u)
+- API'lerde arama yapılırken hem orijinal arama terimi hem de normalize edilmiş terim kullanılıyor
+- Güncellenen collection'lar: brands, categories, manufacturers, units
+
+### useTurkishLettersOnly
+- Sadece harf içeren alanlar için yeni composable oluşturuldu
+- Kullanım alanları: Vergi Dairesi, Şehir, Vergi Dairesi Başlığı
+- Mevcut kullanım:
+  - customers: `company_tax_city`
+  - manufacturers: `tax_office`
+
+### useTurkishInput Güncellemeleri
+- Boşluktan sonra gelen kelimenin ilk harfi artık büyük yapılıyor
+- Türkçe İ harfi sorunu düzeltildi (ı -> I yerine İ kullanımı)
+- Türkçe küçük harf dönüşümü eklendi (İ -> i, I -> ı)
+
+### Sort Sistemi İyileştirmeleri
+- `useCrud.ts` içinde `sortBy` tipi `'name' | 'created'` yerine `string` olarak değiştirildi
+- Dinamik sıralama desteği eklendi
+- Categories'de sıralama kaldırıldı (hiyerarşik yapı)
+- Manufacturers'da "Yetkili Kişi" sıralaması eklendi
+
+### UI İyileştirmeleri
+
+#### Toast Iconları
+- HTML entity yerine SVG icon kullanımına geçildi
+- Eklenen iconlar:
+  - `ToastSuccessIcon.vue`
+  - `ToastErrorIcon.vue`
+  - `ToastWarningIcon.vue`
+  - `ToastInfoIcon.vue`
+  - `ToastCloseIcon.vue`
+
+#### View Sayfaları
+- Alanlar arasına border (alt çizgi) eklendi
+- Son alanın altındaki border kaldırıldı
+- Başlıklar mavi renk yapıldı (`text-blue-600 dark:text-blue-400`)
+- Güncellenen sayfalar: brands, categories, manufacturers, units
+
+#### Müşteri Tablosu
+- TİP alanı telefon sonrasına taşındı
+- Başlık "MÜŞTERİ TİPİ" yapıldı
+- Bireysel için mavi, Kurumsal için mor renkler eklendi
+
+### Helper Fonksiyonlar
+- `server/utils/search.ts` - Türkçe arama normalizasyonu için yardımcı fonksiyonlar
 
 ### Textarea Input (useTextareaInput)
 Textarea alanları için kullanılır. Tüm karakterlere izin verir.
