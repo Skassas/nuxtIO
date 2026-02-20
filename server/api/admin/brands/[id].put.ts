@@ -1,5 +1,21 @@
 import { brandSchema } from '../../../validations/brands'
 
+function normalizeForSearch(text: string): string {
+  const turkishChars: Record<string, string> = {
+    'ç': 'c', 'Ç': 'C',
+    'ğ': 'g', 'Ğ': 'G',
+    'ı': 'i', 'İ': 'I',
+    'ö': 'o', 'Ö': 'O',
+    'ş': 's', 'Ş': 'S',
+    'ü': 'u', 'Ü': 'U'
+  }
+  let normalized = text
+  for (const [turkish, ascii] of Object.entries(turkishChars)) {
+    normalized = normalized.replace(new RegExp(turkish, 'g'), ascii)
+  }
+  return normalized.toLowerCase()
+}
+
 export default defineEventHandler(async (event) => {
   const pb = await createPBAdminClient()
   const id = getRouterParam(event, 'id')
@@ -15,7 +31,7 @@ export default defineEventHandler(async (event) => {
   if (!formData) {
     throw createError({
       statusCode: 400,
-      data: { error: 'VALIDATION_ERROR', message: 'Form verisi bulunamadi' },
+      data: { error: 'VALIDATION_ERROR', message: 'Form verisi bulunamadı' },
     })
   }
 
@@ -42,10 +58,13 @@ export default defineEventHandler(async (event) => {
     })
   }
 
+  const searchIndex = normalizeForSearch(name || '')
+
   try {
     const data: Record<string, any> = {
       name: name?.trim(),
       description: description?.trim() || '',
+      search_index: searchIndex,
     }
 
     if (image) {
@@ -79,7 +98,7 @@ export default defineEventHandler(async (event) => {
   } catch (err: any) {
     throw createError({
       statusCode: 500,
-      data: { error: 'SERVER_ERROR', message: 'Marka guncellenirken bir hata olustu' },
+      data: { error: 'SERVER_ERROR', message: 'Marka güncellenirken bir hata oluştu' },
     })
   }
 })

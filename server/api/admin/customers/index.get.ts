@@ -28,16 +28,16 @@ export default defineEventHandler(async (event) => {
       ? `(search_index ~ "${search.toLowerCase()}" || search_index ~ "${normalized}")` 
       : ''
     
-    const result = await pb.collection('brands').getList(page, perPage, {
+    const result = await pb.collection('customers').getList(page, perPage, {
       sort,
       filter,
     })
     return result
   } catch (err: any) {
-    console.error('[brands/index.get] PB hata:', err?.message || err)
+    console.error('[customers/index.get] PB hata:', err?.message || err)
     throw createError({
       statusCode: 500,
-      data: { error: 'SERVER_ERROR', message: 'Markalar getirilirken bir hata oluştu' },
+      data: { error: 'SERVER_ERROR', message: 'Müşteriler getirilirken bir hata oluştu' },
     })
   }
 })

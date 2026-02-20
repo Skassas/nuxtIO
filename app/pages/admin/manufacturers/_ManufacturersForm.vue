@@ -25,7 +25,7 @@
     </div>
     <div>
       <label class="mb-1 block text-sm font-medium text-gray-700 dark:text-gray-300">Vergi Numarası</label>
-      <input :value="taxIdInput.inputValue.value" @input="(e) => { taxIdInput.handleInput(e); form.tax_id = taxIdInput.inputValue.value }" @keydown="taxIdInput.handleKeyDown" type="text" placeholder="Vergi numarasını girin"
+      <input :value="taxIdInput.inputValue.value" @input="(e) => { taxIdInput.handleInput(e); form.tax_id = taxIdInput.inputValue.value ? Number(taxIdInput.inputValue.value) : null }" @keydown="taxIdInput.handleKeyDown" type="text" placeholder="Vergi numarasını girin"
         class="w-full rounded-lg border border-gray-300 px-4 py-2 text-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white" />
     </div>
     <div>
@@ -40,6 +40,8 @@
 import { manufacturerSchema } from '~/validations/manufacturers'
 import type { ManufacturerInput } from '~/validations/manufacturers'
 import { useTurkishInput } from '~/composables/useTurkishInput'
+import { useTurkishLettersOnly } from '~/composables/useTurkishLettersOnly'
+import { useNumericInput } from '~/composables/useNumericInput'
 
 const props = defineProps<{
   modelValue: ManufacturerInput
@@ -72,7 +74,7 @@ watch(ownerInput.inputValue, (val) => {
   form.value.owner = val
 })
 
-const taxOfficeInput = useTurkishInput(props.modelValue.tax_office)
+const taxOfficeInput = useTurkishLettersOnly(props.modelValue.tax_office || '')
 watch(() => form.value.tax_office, (val) => {
   taxOfficeInput.inputValue.value = val
 })
@@ -80,12 +82,12 @@ watch(taxOfficeInput.inputValue, (val) => {
   form.value.tax_office = val
 })
 
-const taxIdInput = useTurkishInput(props.modelValue.tax_id)
+const taxIdInput = useNumericInput(props.modelValue.tax_id?.toString() || '')
 watch(() => form.value.tax_id, (val) => {
-  taxIdInput.inputValue.value = val
+  taxIdInput.inputValue.value = val?.toString() || ''
 })
 watch(taxIdInput.inputValue, (val) => {
-  form.value.tax_id = val
+  form.value.tax_id = val ? Number(val) : null
 })
 
 const phoneDisplay = ref(props.modelValue.phone || '')

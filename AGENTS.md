@@ -25,6 +25,7 @@
 
 ## Test ve Build
 - Önemli değişikliklerden sonra `npm run build` ile projenin çalıştığını doğrula.
+- **Build alma: Kullanıcı istemeden build alma. Kullanıcıya kontrol edilmesini söyle ve onay beklenene kadar bekle.**
 
 ## Türkçe Karakter Kullanımı
 - Button ismi, Sayfa Başlığı, Menü Başlığı, Form Başlığı, Form Elemanları, Tablo Başlıkları, gibi kod harici yazılan yerlerde Türkçe karakter kullan. Örnek: Markayi Duzenle -> Markayı Düzenle.
@@ -121,7 +122,7 @@ function formatPhone(phone?: string) {
 ```
 
 ### Numeric Input (useNumericInput)
-Sadece rakam girişi için kullanılır (quantity, number, price gibi alanlarda).
+Sadece rakam girişi için kullanılır (quantity, number, price, TCKN, vergi numarası gibi alanlarda).
 
 **Özellikler:**
 - Sadece 0-9 rakamları kullanılır
@@ -179,6 +180,38 @@ watch(myField.inputValue, (val) => {
     @input="(e) => { myField.handleInput(e); form.myField = myField.inputValue.value }" 
     @keydown="myField.handleKeyDown" 
   ></textarea>
+</template>
+```
+
+### Sadece Harf İçeren Input (useTurkishLettersOnly)
+Sadece harf içeren alanlar için kullanılır (vergi dairesi, vergi numarası başlığı, şehir gibi).
+
+**Özellikler:**
+- Sadece a-z ve Türkçe karakterler (ğüşöçİĞÜŞÖÇ) kullanılır
+- Boşluk ile başlanamaz
+- İlk harf büyük (Türkçe karakterler dahil)
+
+**Kullanım:**
+```vue
+<script setup>
+import { useTurkishLettersOnly } from '~/composables/useTurkishLettersOnly'
+
+const myField = useTurkishLettersOnly(props.modelValue.myField || '')
+
+watch(() => form.value.myField, (val) => {
+  myField.inputValue.value = val
+})
+watch(myField.inputValue, (val) => {
+  form.value.myField = val
+})
+</script>
+
+<template>
+  <input 
+    :value="myField.inputValue.value" 
+    @input="(e) => { myField.handleInput(e); form.myField = myField.inputValue.value }" 
+    @keydown="myField.handleKeyDown" 
+  />
 </template>
 ```
 

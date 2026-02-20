@@ -3,20 +3,20 @@
     <table class="w-full text-left text-sm">
       <thead class="bg-gray-50 dark:bg-gray-700">
         <tr>
-          <th class="px-4 py-4 font-semibold text-gray-600 dark:text-gray-300 w-16 uppercase text-xs text-center">Sıra</th>
-          <th class="px-4 py-4 font-semibold text-gray-600 dark:text-gray-300 uppercase text-xs align-middle" @click="$emit('sort', 'company')">
+          <th class="px-4 py-4 font-semibold text-gray-600 dark:text-gray-300 uppercase text-xs text-center">Sıra</th>
+          <th class="px-4 py-4 font-semibold text-gray-600 dark:text-gray-300 uppercase text-xs align-middle" @click="$emit('sort', 'first_name')">
             <span class="inline-flex items-center gap-1 cursor-pointer hover:text-blue-600 dark:hover:text-blue-400">
-              <SortIcon :active="sortBy === 'company'" :direction="sortBy === 'company' ? sortOrder : null" class="w-4 h-4" />
-              <span>Firma Adı</span>
-            </span>
-          </th>
-          <th class="px-4 py-4 font-semibold text-gray-600 dark:text-gray-300 uppercase text-xs align-middle" @click="$emit('sort', 'owner')">
-            <span class="inline-flex items-center gap-1 cursor-pointer hover:text-blue-600 dark:hover:text-blue-400">
-              <SortIcon :active="sortBy === 'owner'" :direction="sortBy === 'owner' ? sortOrder : null" class="w-4 h-4" />
-              <span>Yetkili Kişi</span>
+              <SortIcon :active="sortBy === 'first_name'" :direction="sortBy === 'first_name' ? sortOrder : null" class="w-4 h-4" />
+              <span>Müşteri Bilgileri</span>
             </span>
           </th>
           <th class="px-4 py-4 font-semibold text-gray-600 dark:text-gray-300 uppercase text-xs">Telefon</th>
+          <th class="px-4 py-4 font-semibold text-gray-600 dark:text-gray-300 w-32 uppercase text-xs text-center whitespace-nowrap" @click="$emit('sort', 'customer_type')">
+            <span class="inline-flex items-center gap-1 cursor-pointer hover:text-blue-600 dark:hover:text-blue-400">
+              <SortIcon :active="sortBy === 'customer_type'" :direction="sortBy === 'customer_type' ? sortOrder : null" class="w-4 h-4" />
+              <span>MÜŞTERİ TİPİ</span>
+            </span>
+          </th>
           <th class="px-4 py-4 font-semibold text-gray-600 dark:text-gray-300 w-40 text-center uppercase text-xs"></th>
         </tr>
       </thead>
@@ -24,19 +24,25 @@
         <tr v-if="loading" class="text-center">
           <td colspan="5" class="px-4 py-8 text-gray-500 dark:text-gray-400">Yükleniyor...</td>
         </tr>
-        <tr v-else-if="!manufacturers.length" class="text-center">
-          <td colspan="5" class="px-4 py-8 text-gray-500 dark:text-gray-400">Üretici bulunamadı</td>
+        <tr v-else-if="!customers.length" class="text-center">
+          <td colspan="5" class="px-4 py-8 text-gray-500 dark:text-gray-400">Müşteri bulunamadı</td>
         </tr>
-        <tr v-for="(manufacturer, index) in manufacturers" :key="manufacturer.id" class="hover:bg-gray-100 dark:hover:bg-gray-700">
+        <tr v-for="(customer, index) in customers" :key="customer.id" class="hover:bg-gray-100 dark:hover:bg-gray-700">
           <td class="px-4 py-1 text-gray-700 dark:text-gray-300 text-center">{{ (currentPage - 1) * perPage + index + 1 }}</td>
-          <td class="px-4 py-1 text-gray-800 dark:text-white">{{ manufacturer.company }}</td>
-          <td class="px-4 py-1 text-gray-600 dark:text-gray-400">{{ manufacturer.owner || '-' }}</td>
-          <td class="px-4 py-1 text-gray-600 dark:text-gray-400">{{ formatPhone(manufacturer.phone) }}</td>
+          <td class="px-4 py-1 text-gray-800 dark:text-white">
+            {{ customer.customer_type === 'individual' ? `${customer.first_name} ${customer.last_name}` : customer.company_name }}
+          </td>
+          <td class="px-4 py-1 text-gray-600 dark:text-gray-400">{{ formatPhone(customer.customer_type === 'individual' ? customer.phone : customer.company_phone) }}</td>
+          <td class="px-4 py-1 text-center whitespace-nowrap">
+            <span :class="customer.customer_type === 'individual' ? 'bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200' : 'bg-purple-100 text-purple-800 dark:bg-purple-900 dark:text-purple-200'" class="inline-flex justify-center items-center px-2 py-1 rounded text-xs font-medium w-16">
+              {{ customer.customer_type === 'individual' ? 'Bireysel' : 'Kurumsal' }}
+            </span>
+          </td>
           <td class="px-4 py-1">
             <div class="flex items-center justify-center gap-1">
-              <ViewButton @click="$emit('view', manufacturer)" />
-              <EditButton @click="$emit('edit', manufacturer)" />
-              <DeleteButton :item-id="manufacturer.id" :item-name="manufacturer.company" :on-delete="(id) => $emit('delete', id)" />
+              <ViewButton @click="$emit('view', customer)" />
+              <EditButton @click="$emit('edit', customer)" />
+              <DeleteButton :item-id="customer.id" :item-name="customer.customer_type === 'individual' ? `${customer.first_name} ${customer.last_name}` : customer.company_name" :on-delete="(id) => $emit('delete', id)" />
             </div>
           </td>
         </tr>
@@ -63,20 +69,27 @@
 <script setup lang="ts">
 import SortIcon from '~/assets/svg/SortIcon.vue'
 
-export interface Manufacturer {
+export interface Customer {
   id: string
-  company: string
-  owner: string
+  customer_type: 'individual' | 'corporate'
+  tckn: string
+  first_name: string
+  last_name: string
   phone: string
-  tax_office: string
-  tax_id: string
-  adress: string
+  billing_address: string
+  home_address: string
+  description: string
+  company_name: string
+  company_phone: string
+  company_tax_city: string
+  company_tax_id: string
+  company_description: string
   created: string
   updated: string
 }
 
 defineProps<{
-  manufacturers: Manufacturer[]
+  customers: Customer[]
   loading: boolean
   currentPage: number
   totalPages: number
@@ -87,8 +100,8 @@ defineProps<{
 }>()
 
 defineEmits<{
-  view: [manufacturer: Manufacturer]
-  edit: [manufacturer: Manufacturer]
+  view: [customer: Customer]
+  edit: [customer: Customer]
   delete: [id: string]
   prevPage: []
   nextPage: []

@@ -80,7 +80,7 @@ const props = defineProps<{
   totalPages: number
   perPage: number
   totalItems: number
-  sortBy: 'name' | 'created'
+  sortBy: string
   sortOrder: 'asc' | 'desc'
 }>()
 
@@ -90,7 +90,7 @@ defineEmits<{
   delete: [id: string]
   prevPage: []
   nextPage: []
-  sort: [field: 'name' | 'created']
+  sort: [field: string]
 }>()
 
 function getImageUrl(imageId: string) {

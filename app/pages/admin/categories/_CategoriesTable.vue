@@ -3,9 +3,8 @@
     <table class="w-full text-left text-sm">
       <thead class="bg-gray-50 dark:bg-gray-700">
         <tr>
-          <th class="px-4 py-4 font-semibold text-gray-600 dark:text-gray-300 uppercase text-xs cursor-pointer hover:text-blue-600 dark:hover:text-blue-400" @click="$emit('sort', 'hierarchy')">
+          <th class="px-4 py-4 font-semibold text-gray-600 dark:text-gray-300 uppercase text-xs">
             <span class="inline-flex items-center gap-1">
-              <SortIcon :active="sortBy === 'hierarchy'" :direction="sortBy === 'hierarchy' ? sortOrder : null" class="w-4 h-4" />
               <span>Kategori Düzeni</span>
             </span>
           </th>
@@ -29,8 +28,8 @@
             </div>
           </td>
           <td class="px-4" :class="paddingClass">
-            <img v-if="item.image" :src="getFileUrl(item.image)" alt="" class="h-8 w-8 rounded-lg border border-gray-200 object-cover dark:border-gray-600" />
-            <div v-else class="h-8 w-8 rounded-lg border border-gray-200 bg-gray-200 dark:bg-gray-700 dark:border-gray-600 flex items-center justify-center">
+            <img v-if="item.image" :src="getFileUrl(item.image)" alt="" class="h-10 w-10 rounded-lg border border-gray-200 object-cover dark:border-gray-600" />
+            <div v-else class="h-10 w-10 rounded-lg border border-gray-200 bg-gray-200 dark:bg-gray-700 dark:border-gray-600 flex items-center justify-center">
               <ImageIcon class="text-gray-400 h-5 w-5" />
             </div>
           </td>
@@ -82,7 +81,6 @@
 
 <script setup lang="ts">
 import ImageIcon from '~/assets/svg/ImageIcon.vue'
-import SortIcon from '~/assets/svg/SortIcon.vue'
 
 export interface Category {
   id: string
@@ -111,8 +109,6 @@ const props = defineProps<{
   totalPages: number
   perPage: number
   totalItems: number
-  sortBy: 'name' | 'created' | 'hierarchy'
-  sortOrder: 'asc' | 'desc'
   isSearchMode?: boolean
 }>()
 
@@ -123,11 +119,9 @@ const emit = defineEmits<{
   toggleStatus: [category: Category]
   prevPage: []
   nextPage: []
-  sort: [field: 'name' | 'created' | 'hierarchy']
   perPageChange: [value: number]
 }>()
 
-// Categories are already hierarchical from parent component
 interface HierarchicalCategory extends Category {
   level: number
   isLast: boolean
@@ -135,32 +129,25 @@ interface HierarchicalCategory extends Category {
 }
 
 const hierarchicalCategories = computed((): HierarchicalCategory[] => {
-  // Parent component already sends hierarchical data with level, isLast, parentIds
   return props.categories as HierarchicalCategory[]
 })
 
-// Dynamic padding class based on perPage
 const paddingClass = computed(() => {
-  return 'py-1'
+  return 'py-[0.2rem]'
 })
 
-// Handle per page change
 function handlePerPageChange(event: Event) {
   const value = (event.target as HTMLSelectElement).value
   if (value === '999999') {
-    // "Tümü" seçildi, tüm kayıtları göster
     emit('perPageChange', 999999)
   } else {
     emit('perPageChange', Number(value))
   }
 }
 
-// Generate tree indentation string with L shape
 function getIndentationString(item: HierarchicalCategory): string {
   if (item.level === 0) return ''
   
-  // Level 1: 2 nbsp + L, Level 2: 6 nbsp + L, Level 3: 10 nbsp + L...
-  // Her level için 4 nbsp artış
   const spaceCount = 2 + (item.level - 1) * 4
   const spaces = '&nbsp;'.repeat(spaceCount)
   return spaces + '└─&nbsp;'

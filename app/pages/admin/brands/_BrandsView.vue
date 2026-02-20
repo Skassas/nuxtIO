@@ -1,17 +1,17 @@
 <template>
   <div class="space-y-4">
-    <div class="flex justify-center">
+    <div class="flex justify-center pb-3 border-b border-gray-200 dark:border-gray-700">
       <img v-if="brand?.image" :src="getImageUrl(brand.image)" alt="" class="h-40 w-40 object-cover border border-gray-300 dark:border-gray-600" style="border-radius: 4px" />
       <div v-else class="h-40 w-40 bg-gray-200 dark:bg-gray-700 flex items-center justify-center border border-gray-300 dark:border-gray-600" style="border-radius: 4px">
         <ImageIcon class="h-16 w-16 text-gray-400" />
       </div>
     </div>
-    <div>
-      <label class="text-sm font-medium text-gray-500 dark:text-gray-400">Marka Adı</label>
+    <div class="pb-3 border-b border-gray-200 dark:border-gray-700">
+      <label class="text-sm font-medium text-blue-600 dark:text-blue-400">Marka Adı</label>
       <p class="mt-1 text-gray-800 dark:text-white">{{ brand?.name }}</p>
     </div>
     <div>
-      <label class="text-sm font-medium text-gray-500 dark:text-gray-400">Açıklama</label>
+      <label class="text-sm font-medium text-blue-600 dark:text-blue-400">Açıklama</label>
       <p class="mt-1 text-gray-800 dark:text-white">{{ brand?.description || '-' }}</p>
     </div>
   </div>

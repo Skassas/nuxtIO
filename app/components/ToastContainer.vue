@@ -7,20 +7,26 @@
         :class="toastClass(toast.type)"
         class="flex items-center gap-3 rounded-lg px-4 py-3 shadow-lg min-w-[300px] max-w-[420px]"
       >
-        <span class="text-lg">
-          <template v-if="toast.type === 'success'">&#10003;</template>
-          <template v-else-if="toast.type === 'error'">&#10007;</template>
-          <template v-else-if="toast.type === 'warning'">&#9888;</template>
-          <template v-else>&#8505;</template>
-        </span>
+        <ToastSuccessIcon v-if="toast.type === 'success'" />
+        <ToastErrorIcon v-else-if="toast.type === 'error'" />
+        <ToastWarningIcon v-else-if="toast.type === 'warning'" />
+        <ToastInfoIcon v-else />
         <span class="flex-1 text-sm">{{ toast.message }}</span>
-        <button class="ml-2 opacity-60 hover:opacity-100" @click="removeToast(toast.id)">&times;</button>
+        <button class="ml-2 opacity-60 hover:opacity-100 p-1 rounded hover:bg-white/20 transition-colors" @click="removeToast(toast.id)">
+          <ToastCloseIcon />
+        </button>
       </div>
     </TransitionGroup>
   </div>
 </template>
 
 <script setup lang="ts">
+import ToastSuccessIcon from '~/assets/svg/ToastSuccessIcon.vue'
+import ToastErrorIcon from '~/assets/svg/ToastErrorIcon.vue'
+import ToastWarningIcon from '~/assets/svg/ToastWarningIcon.vue'
+import ToastInfoIcon from '~/assets/svg/ToastInfoIcon.vue'
+import ToastCloseIcon from '~/assets/svg/ToastCloseIcon.vue'
+
 const { toasts, removeToast } = useToast()
 
 function toastClass(type: string) {

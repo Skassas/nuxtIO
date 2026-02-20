@@ -1,27 +1,27 @@
 <template>
   <div class="space-y-4">
-    <div>
-      <label class="text-sm font-medium text-gray-500 dark:text-gray-400">Firma Adı</label>
+    <div class="pb-3 border-b border-gray-200 dark:border-gray-700">
+      <label class="text-sm font-medium text-blue-600 dark:text-blue-400">Firma Adı</label>
       <p class="mt-1 text-gray-800 dark:text-white">{{ manufacturer?.company }}</p>
     </div>
-    <div>
-      <label class="text-sm font-medium text-gray-500 dark:text-gray-400">Yetkili Kişi</label>
+    <div class="pb-3 border-b border-gray-200 dark:border-gray-700">
+      <label class="text-sm font-medium text-blue-600 dark:text-blue-400">Yetkili Kişi</label>
       <p class="mt-1 text-gray-800 dark:text-white">{{ manufacturer?.owner || '-' }}</p>
     </div>
-    <div>
-      <label class="text-sm font-medium text-gray-500 dark:text-gray-400">Telefon</label>
+    <div class="pb-3 border-b border-gray-200 dark:border-gray-700">
+      <label class="text-sm font-medium text-blue-600 dark:text-blue-400">Telefon</label>
       <p class="mt-1 text-gray-800 dark:text-white">{{ formatPhone(manufacturer?.phone) }}</p>
     </div>
-    <div>
-      <label class="text-sm font-medium text-gray-500 dark:text-gray-400">Vergi Dairesi</label>
+    <div class="pb-3 border-b border-gray-200 dark:border-gray-700">
+      <label class="text-sm font-medium text-blue-600 dark:text-blue-400">Vergi Dairesi</label>
       <p class="mt-1 text-gray-800 dark:text-white">{{ manufacturer?.tax_office || '-' }}</p>
     </div>
-    <div>
-      <label class="text-sm font-medium text-gray-500 dark:text-gray-400">Vergi Numarası</label>
+    <div class="pb-3 border-b border-gray-200 dark:border-gray-700">
+      <label class="text-sm font-medium text-blue-600 dark:text-blue-400">Vergi Numarası</label>
       <p class="mt-1 text-gray-800 dark:text-white">{{ manufacturer?.tax_id || '-' }}</p>
     </div>
     <div>
-      <label class="text-sm font-medium text-gray-500 dark:text-gray-400">Adres</label>
+      <label class="text-sm font-medium text-blue-600 dark:text-blue-400">Adres</label>
       <p class="mt-1 text-gray-800 dark:text-white">{{ manufacturer?.adress || '-' }}</p>
     </div>
   </div>

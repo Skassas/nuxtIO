@@ -1,5 +1,21 @@
 import { categorySchema } from '../../../../app/validations/categories'
 
+function normalizeForSearch(text: string): string {
+  const turkishChars: Record<string, string> = {
+    'ç': 'c', 'Ç': 'C',
+    'ğ': 'g', 'Ğ': 'G',
+    'ı': 'i', 'İ': 'I',
+    'ö': 'o', 'Ö': 'O',
+    'ş': 's', 'Ş': 'S',
+    'ü': 'u', 'Ü': 'U'
+  }
+  let normalized = text
+  for (const [turkish, ascii] of Object.entries(turkishChars)) {
+    normalized = normalized.replace(new RegExp(turkish, 'g'), ascii)
+  }
+  return normalized.toLowerCase()
+}
+
 export default defineEventHandler(async (event) => {
   const pb = await createPBAdminClient()
   const formData = await readMultipartFormData(event)
@@ -40,12 +56,15 @@ export default defineEventHandler(async (event) => {
     })
   }
 
+  const searchIndex = normalizeForSearch(name || '')
+
   try {
     const data: Record<string, any> = {
       name: name?.trim(),
       description: description?.trim() || '',
       parent: parent?.trim() || null,
       status: status === 'true',
+      search_index: searchIndex,
     }
 
     if (image) {

@@ -1,3 +1,5 @@
+import { createPBAdminClient } from '#server/utils/pocketbase'
+
 export default defineEventHandler(async (event) => {
   const pb = await createPBAdminClient()
   
@@ -17,10 +19,28 @@ export default defineEventHandler(async (event) => {
   const search = (query.search as string) || ''
   const sort = (query.sort as string) || '-created'
 
+  const turkishChars: Record<string, string> = {
+    'ç': 'c', 'Ç': 'C',
+    'ğ': 'g', 'Ğ': 'G',
+    'ı': 'i', 'İ': 'I',
+    'ö': 'o', 'Ö': 'O',
+    'ş': 's', 'Ş': 'S',
+    'ü': 'u', 'Ü': 'U'
+  }
+  
+  let normalized = search.toLowerCase()
+  for (const [turkish, ascii] of Object.entries(turkishChars)) {
+    normalized = normalized.replace(new RegExp(turkish, 'g'), ascii)
+  }
+
   try {
+    const filter = search 
+      ? `(search_index ~ "${search.toLowerCase()}" || search_index ~ "${normalized}")` 
+      : ''
+    
     const result = await pb.collection('manufacturers').getList(page, perPage, {
       sort,
-      filter: search ? `company ~ "${search}" || owner ~ "${search}"` : '',
+      filter,
     })
     return result
   } catch (err: any) {

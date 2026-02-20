@@ -18,7 +18,7 @@ interface UseCrudReturn<T> {
   perPage: number
   totalPages: Ref<number>
   totalItems: Ref<number>
-  sortBy: Ref<'name' | 'created'>
+  sortBy: Ref<string>
   sortOrder: Ref<'asc' | 'desc'>
   drawerOpen: Ref<boolean>
   drawerMode: Ref<'create' | 'edit' | 'view'>
@@ -51,7 +51,7 @@ export function useCrud<T extends Record<string, any>>(
   const perPage = options.perPage ?? 10
   const totalPages = ref(1)
   const totalItems = ref(0)
-  const sortBy = ref<'name' | 'created'>('name')
+  const sortBy = ref<string>('name')
   const sortOrder = ref<'asc' | 'desc'>('asc')
 
   const drawerOpen = ref(false)
@@ -109,6 +109,12 @@ export function useCrud<T extends Record<string, any>>(
           const dateB = new Date(b.created || 0).getTime()
           return sortOrder.value === 'asc' ? dateA - dateB : dateB - dateA
         })
+      } else {
+        itemsArray.sort((a: T, b: T) => {
+          const valA = String(a[sortBy.value as keyof T] || '')
+          const valB = String(b[sortBy.value as keyof T] || '')
+          return sortOrder.value === 'asc' ? valA.localeCompare(valB, 'tr') : valB.localeCompare(valA, 'tr')
+        })
       }
       
       items.value = itemsArray
@@ -120,7 +126,7 @@ export function useCrud<T extends Record<string, any>>(
     }
   }
 
-  function setSort(field: 'name' | 'created') {
+  function setSort(field: string) {
     if (sortBy.value === field) {
       sortOrder.value = sortOrder.value === 'asc' ? 'desc' : 'asc'
     } else {
@@ -179,7 +185,8 @@ export function useCrud<T extends Record<string, any>>(
       return true
     } catch (error: any) {
       const errors: Record<string, string> = {}
-      error.errors.forEach((err: any) => {
+      const issues = error.errors || error.issues || []
+      issues.forEach((err: any) => {
         const field = err.path[0]
         errors[field] = err.message
       })

@@ -22,8 +22,8 @@
     </div>
 
     <CategoriesTable :categories="displayItems" :loading="loading" :current-page="tableCurrentPage" :total-pages="tableTotalPages" :per-page="tablePerPage" :total-items="allCategoriesForTable.length"
-      :sort-by="sortBy" :sort-order="sortOrder" :is-search-mode="isSearchActive"
-      @view="openViewDrawerFetch" @edit="openEditDrawer" @delete="handleDelete" @toggle-status="handleToggleStatus" @prev-page="tableCurrentPage--" @next-page="tableCurrentPage++" @sort="handleSort" @per-page-change="(val) => { tablePerPage = val; tableCurrentPage = 1; }" />
+      :is-search-mode="isSearchActive"
+      @view="openViewDrawerFetch" @edit="openEditDrawer" @delete="handleDelete" @toggle-status="handleToggleStatus" @prev-page="tableCurrentPage--" @next-page="tableCurrentPage++" @per-page-change="(val) => { tablePerPage = val; tableCurrentPage = 1; }" />
 
     <AdminDrawer :isOpen="drawerOpen" :title="drawerTitle" :icon="drawerIcon" @close="closeDrawer">
       <CategoriesView v-if="drawerMode === 'view'" :category="selectedItem" />
@@ -118,76 +118,14 @@ sortOrder.value = 'asc'
 async function handleDelete(id: string) {
   try {
     await handleDeleteBase(id)
-    // Refresh both items and allCategories after successful deletion
     await fetchItems()
     await fetchAllCategories()
   } catch (error: any) {
-    // Check if error is about children
     if (error?.data?.error === 'HAS_CHILDREN') {
       addToast(error.data.message, 'error')
     } else {
-      // Re-throw other errors
       throw error
     }
-  }
-}
-
-// Custom sort handler for hierarchy sorting
-const handleSort = (field: 'name' | 'created' | 'hierarchy') => {
-  if (field === 'hierarchy') {
-    // Toggle sort order
-    if (sortBy.value === 'hierarchy') {
-      sortOrder.value = sortOrder.value === 'asc' ? 'desc' : 'asc'
-    } else {
-      sortBy.value = 'hierarchy'
-      sortOrder.value = 'asc'
-    }
-    
-    // Get all categories
-    const categories = allCategories.value.length > 0 ? allCategories.value : items.value
-    
-    // Create a map for quick lookup
-    const categoryMap = new Map(categories.map(c => [c.id, c]))
-    
-    // Get root categories and sort them
-    const rootCategories = categories.filter(c => !c.parent || c.parent === '')
-    rootCategories.sort((a, b) => {
-      if (sortOrder.value === 'asc') {
-        return a.name.localeCompare(b.name)
-      } else {
-        return b.name.localeCompare(a.name)
-      }
-    })
-    
-    // Recursively sort children for each category
-    const sortChildren = (parentId: string): any[] => {
-      const children = categories.filter(c => c.parent === parentId)
-      // Sort children by name
-      children.sort((a, b) => a.name.localeCompare(b.name))
-      
-      const result: any[] = []
-      children.forEach(child => {
-        result.push(child)
-        result.push(...sortChildren(child.id))
-      })
-      return result
-    }
-    
-    // Build final sorted array: root + its children, next root + its children, etc.
-    const sortedItems: any[] = []
-    rootCategories.forEach(root => {
-      sortedItems.push(root)
-      sortedItems.push(...sortChildren(root.id))
-    })
-    
-    // Update allCategories array (this affects the table display)
-    if (allCategories.value.length > 0) {
-      allCategories.value = sortedItems
-    } else {
-      items.value = sortedItems
-    }
-  } else {
-    setSort(field)
   }
 }
 
@@ -209,14 +147,13 @@ async function fetchAllCategories() {
 }
 
 const availableCategories = computed(() => {
-  // Build hierarchical options for select using all categories (not paginated)
   const categories = allCategories.value.length > 0 ? allCategories.value : items.value
   const result: { id: string; name: string; level: number; isLast: boolean; parentIds: string[] }[] = []
   const visited = new Set<string>()
   
   const addCategoryAndChildren = (category: any, level: number, isLast: boolean, parentIds: string[]) => {
     if (visited.has(category.id)) return
-    if (category.id === selectedItem.value?.id) return // Skip current category (can't be its own parent)
+    if (category.id === selectedItem.value?.id) return
     visited.add(category.id)
     
     result.push({
@@ -227,7 +164,6 @@ const availableCategories = computed(() => {
       parentIds: [...parentIds]
     })
     
-    // Find and add children - sort by name A-Z
     const children = categories
       .filter(c => c.parent === category.id)
       .sort((a, b) => a.name.localeCompare(b.name, 'tr'))
@@ -237,7 +173,6 @@ const availableCategories = computed(() => {
     })
   }
   
-  // Start with root categories (no parent) - sort by name A-Z
   const rootCategories = categories
     .filter(c => !c.parent || c.parent === '')
     .sort((a, b) => a.name.localeCompare(b.name, 'tr'))
@@ -275,7 +210,6 @@ async function handleCategorySubmit() {
       }
     }
     await handleSubmit(body)
-    // Refresh all categories after successful creation
     await fetchAllCategories()
   } else if (drawerMode.value === 'edit') {
     const body = new FormData()
@@ -293,7 +227,6 @@ async function handleCategorySubmit() {
       body.append('image', 'null')
     }
     await handleSubmit(body)
-    // Refresh all categories after successful update
     await fetchAllCategories()
   }
 }
@@ -322,27 +255,20 @@ async function handleToggleStatus(category: Category) {
   }
 }
 
-// Computed property to check if search is active
 const isSearchActive = computed(() => {
   return !!(searchQuery.value && searchQuery.value.trim())
 })
 
-// Computed property for table display
-// When searching, use items (search results), otherwise use allCategories
 const allCategoriesForTable = computed(() => {
   if (isSearchActive.value) {
-    // When searching, use the search results (items)
     return items.value
   }
-  // When not searching, use all categories for proper hierarchy display
   return allCategories.value.length > 0 ? allCategories.value : items.value
 })
 
-// Build hierarchical tree from all categories
 const hierarchicalCategories = computed(() => {
   const categories = allCategoriesForTable.value
   
-  // When searching, show flat list without hierarchy
   if (searchQuery.value.trim()) {
     return categories.map((c: any) => ({
       id: c.id,
@@ -356,7 +282,6 @@ const hierarchicalCategories = computed(() => {
     }))
   }
   
-  // Normal mode: build hierarchy
   const result: { id: string; name: string; parent: string; image: string; status: boolean; level: number; isLast: boolean; parentIds: string[] }[] = []
   const visited = new Set<string>()
   
@@ -375,7 +300,6 @@ const hierarchicalCategories = computed(() => {
       parentIds: [...parentIds]
     })
     
-    // Find and add children - sort children by name A-Z
     const children = categories
       .filter(c => c.parent === category.id)
       .sort((a, b) => a.name.localeCompare(b.name, 'tr'))
@@ -385,7 +309,6 @@ const hierarchicalCategories = computed(() => {
     })
   }
   
-  // Start with root categories (no parent) - sort by name A-Z
   const rootCategories = categories
     .filter(c => !c.parent || c.parent === '')
     .sort((a, b) => a.name.localeCompare(b.name, 'tr'))
@@ -394,7 +317,6 @@ const hierarchicalCategories = computed(() => {
     addCategoryAndChildren(category, 0, isLastRoot, [])
   })
   
-  // Handle orphaned categories
   categories.forEach(category => {
     if (!visited.has(category.id)) {
       result.push({
@@ -413,14 +335,11 @@ const hierarchicalCategories = computed(() => {
   return result
 })
 
-// Table pagination state
 const tableCurrentPage = ref(1)
 const tablePerPage = ref(10)
 
-// Computed property for paginated display - uses hierarchical categories
 const displayItems = computed(() => {
   const allItems = hierarchicalCategories.value
-  // If "Tümü" is selected (999999), show all items
   if (tablePerPage.value >= 999999) {
     return allItems
   }
@@ -429,14 +348,12 @@ const displayItems = computed(() => {
   return allItems.slice(start, end)
 })
 
-// Total pages for table
 const tableTotalPages = computed(() => {
   return Math.ceil(hierarchicalCategories.value.length / tablePerPage.value)
 })
 
 onMounted(async () => {
   await fetchItems()
-  // Fetch all categories for proper hierarchy display in table
   await fetchAllCategories()
 })
 </script>

@@ -46,6 +46,7 @@ import CategoryIcon from '~/assets/svg/CategoryIcon.vue'
 import UnitIcon from '~/assets/svg/UnitIcon.vue'
 import TagIcon from '~/assets/svg/TagIcon.vue'
 import ManufacturerIcon from '~/assets/svg/ManufacturerIcon.vue'
+import CustomerIcon from '~/assets/svg/CustomerIcon.vue'
 import CloseIcon from '~/assets/svg/CloseIcon.vue'
 import ChevronRightIcon from '~/assets/svg/ChevronRightIcon.vue'
 
@@ -96,6 +97,11 @@ const menuGroups: MenuGroup[] = [
         label: 'Üreticiler',
         path: '/admin/manufacturers',
         icon: ManufacturerIcon,
+      },
+      {
+        label: 'Müşteriler',
+        path: '/admin/customers',
+        icon: CustomerIcon,
       },
     ],
   },

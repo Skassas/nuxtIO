@@ -1,11 +1,11 @@
 <template>
   <div class="space-y-4">
-    <div>
-      <label class="text-sm font-medium text-gray-500 dark:text-gray-400">Birim Adı</label>
+    <div class="pb-3 border-b border-gray-200 dark:border-gray-700">
+      <label class="text-sm font-medium text-blue-600 dark:text-blue-400">Birim Adı</label>
       <p class="mt-1 text-gray-800 dark:text-white">{{ unit?.name }}</p>
     </div>
     <div>
-      <label class="text-sm font-medium text-gray-500 dark:text-gray-400">Açıklama</label>
+      <label class="text-sm font-medium text-blue-600 dark:text-blue-400">Açıklama</label>
       <p class="mt-1 text-gray-800 dark:text-white">{{ unit?.description || '-' }}</p>
     </div>
   </div>

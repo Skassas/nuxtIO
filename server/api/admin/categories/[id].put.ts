@@ -1,5 +1,21 @@
 import { categorySchema } from '../../../../app/validations/categories'
 
+function normalizeForSearch(text: string): string {
+  const turkishChars: Record<string, string> = {
+    'ç': 'c', 'Ç': 'C',
+    'ğ': 'g', 'Ğ': 'G',
+    'ı': 'i', 'İ': 'I',
+    'ö': 'o', 'Ö': 'O',
+    'ş': 's', 'Ş': 'S',
+    'ü': 'u', 'Ü': 'U'
+  }
+  let normalized = text
+  for (const [turkish, ascii] of Object.entries(turkishChars)) {
+    normalized = normalized.replace(new RegExp(turkish, 'g'), ascii)
+  }
+  return normalized.toLowerCase()
+}
+
 export default defineEventHandler(async (event) => {
   const pb = await createPBAdminClient()
   const id = getRouterParam(event, 'id')
@@ -48,18 +64,16 @@ export default defineEventHandler(async (event) => {
     })
   }
 
+  const searchIndex = normalizeForSearch(name || '')
+
   try {
-    console.log('Güncellenecek kategori ID:', id)
-    console.log('Gelen parent değeri:', parent)
-    
     const data: Record<string, any> = {
       name: name?.trim(),
       description: description?.trim() || '',
       parent: parent?.trim() || null,
       status: status === 'true',
+      search_index: searchIndex,
     }
-    
-    console.log('Gönderilecek data:', data)
 
     if (image) {
       const imageValue = image.value ? image.value : (image.data ? Buffer.from(image.data).toString('utf-8') : undefined)
@@ -87,26 +101,7 @@ export default defineEventHandler(async (event) => {
       }
     }
 
-    // Güncellemeden önce alt kategorileri kontrol et
-    const beforeUpdate = await pb.collection('categories').getList(1, 100, {
-      filter: `parent = "${id}"`
-    })
-    console.log('Güncellemeden önce alt kategoriler:', beforeUpdate.items.map((c: any) => ({ id: c.id, name: c.name, parent: c.parent })))
-    
     const record = await pb.collection('categories').update(id, data)
-    
-    // Güncellemeden sonra alt kategorileri kontrol et
-    const afterUpdate = await pb.collection('categories').getList(1, 100, {
-      filter: `parent = "${id}"`
-    })
-    console.log('Güncellemeden sonra aynı ID ile alt kategoriler:', afterUpdate.items.map((c: any) => ({ id: c.id, name: c.name, parent: c.parent })))
-    
-    // Tüm kategorileri kontrol et - parent'i null olanlar
-    const nullParents = await pb.collection('categories').getList(1, 100, {
-      filter: 'parent = null'
-    })
-    console.log('Parent\'i null olan kategoriler:', nullParents.items.map((c: any) => ({ id: c.id, name: c.name, parent: c.parent })))
-    
     return record
   } catch (err: any) {
     throw createError({
