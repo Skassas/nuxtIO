@@ -1,0 +1,194 @@
+onerror="this.src=http://noimage.jpg"
+
+<input type="file" capture="user">Mobilde ön kamera açar
+
+tanya 
+4 kutu cleocin 150mg sabah 3 akşam 2 adet
+1 kutu omeprol 20mg kapsül antibiyotikten yarım saat önce 1 adet
+
+puppeter için nodejs 18 üstü kurulmalı.
+Nodejs kurulumu kendi sayfasından sürüm seçilerek kolayca yapılabiliyor.
+
+Nodejs ardından npm pakent yöneticisi kurulmalı
+
+servera dosyalar atılarak nmp install yapılmalı
+
+fastyfy.listen bölümünden host 0.0.0.0 olarak atanmalı.
+cyberpanel firewall ve oracle üzerinden tanımlanan port kullanıma açılmalı
+yeterli olmaz ise linux üzerinden port açılmalı
+
+Servera sorgu gönderildiğinde puppeter için bir takım bağımlılıkların eksik yüklenmesinden hata alınıyor. Hata verdiği bağımlılıkları tümü internette arattırılarak kurulması gerekli. Örn: sudo apt-get install libnss3-dev
+
+son olarak zygote_host_impl_linux.cc(99) hatası veriyor. Bunu aşmanın yoluda puppeter lunc edilirken --no--sandbox parametresinin gerekliliği.
+
+puppetteer.launch({
+   headless: true,
+   args: ['--no-sandbox']
+})
+ 
+
+node js arka planda çalıştırmak için ise
+
+npm install pm2 -g 
+
+id yerine <app_name|namespace|id|'all'|json_conf>
+
+pm2 start index.js ->index.js çalıştır
+pm2 list -> çalışan uygulamalar listesi
+pm2 stop 0 -> 0 id nolu işlemi durdur
+pm2 delete 0 -> 0 id nolu işlemi kaldır
+pm2 restart  -> 0 id nolu işlemi tekrar başlat
+pm2 monit -> anlık izleme
+
+
+p
+
+sudo -i
+
+https://cloud.oracle.com/?region=eu-zurich-1&tenant=sturen&username=sturen%40gmail.com&provider=OracleIdentityCloudService&source=email
+sturen@gmail.com
+Sk1....
+
+
+login as : ubuntu 
+
+Oracle Cloud %15 cpu ve %15 ram kullanımı yoksa bir süre sonra sunucuyu durduruyor. Bunun için sunucu
+limitlendirilmiş stress testine sokuluyor. Aşağıda yapılması gerekli işlemler mevcut
+
+https://techtutelage.net/?p=413
+
+sudo su -
+apt update
+apt install supervisor stress-ng 
+
+nano /etc/supervisor/conf.d/stress.conf
+----Aşağıdaki kodları yapıştır-------------------
+
+[program:cpu_stress]
+command=/usr/bin/stress-ng --cpu 4 --cpu-load 15 
+directory=/usr/bin/
+user=ubuntu
+autostart=true
+autorestart=true
+redirect_stderr=true
+stdout_logfile=/var/log/stress.log
+
+[program:memory_stress]
+command=/usr/bin/stress-ng --vm 1 --vm-bytes 15%% --vm-hang 0
+directory=/usr/bin/
+user=ubuntu
+autostart=true
+autorestart=true
+redirect_stderr=true
+stdout_logfile=/var/log/stress.log
+
+----SON-------------------
+
+spervisorctl reread //yaratılan config dosyasını yeniden okut
+
+spervisorctl reload //config dosyasını yükler ve işleme alır
+
+supervisorctl status //Durumu Sorgulamk için
+
+supervisorctl stop //Durdurmak İçin
+
+********
+autostart=true olduğu sürece sunucu yeniden ayağa kalktığında otomatik devreye girer 
+********
+
+
+0 18 * * * spervisorctl reload
+0 19 * * * spervisorctl stop
+
+
+ Visit: https://144.24.235.250:8090
+                Panel username: admin
+                Panel password: nLAbcGPt2nvnW0Ke
+
+Opencart 4 yüklemek için ZIP extention aktif olmalı. Normalde gelmiyor aktif etmek için aşağıdaki kodu uygulayıp php 8.1 seçilmeli.
+
+sudo apt-get install -y postgresql-devel openldap-devel gmp-devel enchant-devel bzip2-devel oniguruma-devel libxml2-devel sqlite-devel icu libicu-devel libxslt-devel libsodium libsodium-devel libzip-devel
+
+
+
+Şifreler: Demo100X2
+DU1189-EURO
+edirnelaptoptamiri.com
+AI-a4ce0c25feacc
+guzel.net.tr
+fuca@hotmail.com
+50785300
+S1.
+
+edirnebilgisayartamiri.com
+https://www.ihs.com.tr/
+AI-a4cbe6676ef68
+fuca@hotmail.com
+50785300
+S1..
+
+
+
+https://tldes.com/com
+291,37 TL kupon kodu: SPSCOMTR
+Spaceship
+
+https://unstoppabledomains.com/domains/dns/transfer-in
+https://www.ihs.com.tr/
+S1..
+
+Tebrikler %10 Alan Adı İndirimi KAZANDINIZ!!
+Kod = SNSNI3UM2GQ
+
+
+TCP: 8090 for CyberPanel
+TCP: 80, TCP: 443 and UDP: 443 for webserver
+TCP: 21 and TCP: 40110-40210 for FTP
+TCP: 25, TCP: 587, TCP: 465, TCP: 110, TCP: 143 and TCP: 993 for mail service
+TCP: 53 and UDP: 53 for DNS service
+Your provider seems blocked port 25 , E-mail sending may not work properly.
+
+FTP user profile
+
+User：varbizde
+
+Password：varbizdecom
+
+Database user profile
+
+Database name：admin_varbizde
+
+User：admin_varbizde
+
+Password：skassas
+
+----------------------------
+varb_prs
+User Name
+admin
+varb_admin
+skassas
+
+ftp
+
+admin_varbizde
+varbizdecom
+
+https://drive.google.com/file/d/1rTYXGY1GyJ8_pVRdwo4LqpyO8Fhxri1M/view?usp=sharing
+
+Heroku
+SalesForce Auth Key
+
+YLIKJNVO2JLVBRF4EZDJALG6TQSRFY63
+
+
+https://www.spaceship.com
+https://www.squarespace.com
+sturen@gmail.com
+Sk1.
+varbizde.com
+
+
+
+
+

@@ -14,14 +14,6 @@
       <label class="text-sm font-medium text-gray-500 dark:text-gray-400">Açıklama</label>
       <p class="mt-1 text-gray-800 dark:text-white">{{ brand?.description || '-' }}</p>
     </div>
-    <div>
-      <label class="text-sm font-medium text-gray-500 dark:text-gray-400">Oluşturulma Tarihi</label>
-      <p class="mt-1 text-gray-800 dark:text-white">{{ formatDate(brand?.created) }}</p>
-    </div>
-    <div>
-      <label class="text-sm font-medium text-gray-500 dark:text-gray-400">Son Güncelleme</label>
-      <p class="mt-1 text-gray-800 dark:text-white">{{ formatDate(brand?.updated) }}</p>
-    </div>
   </div>
 </template>
 
@@ -33,8 +25,6 @@ export interface Brand {
   name: string
   description: string
   image: string
-  created: string
-  updated: string
 }
 
 defineProps<{
@@ -43,10 +33,5 @@ defineProps<{
 
 function getImageUrl(imageId: string) {
   return `/api/filemanager/files/brands/${imageId}`
-}
-
-function formatDate(dateStr?: string) {
-  if (!dateStr) return '-'
-  return new Date(dateStr).toLocaleString('tr-TR')
 }
 </script>

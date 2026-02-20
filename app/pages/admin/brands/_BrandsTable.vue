@@ -23,16 +23,16 @@
           <td colspan="5" class="px-4 py-8 text-gray-500 dark:text-gray-400">Marka bulunamadı</td>
         </tr>
         <tr v-for="(brand, index) in brands" :key="brand.id" class="hover:bg-gray-100 dark:hover:bg-gray-700">
-          <td class="px-4 py-1.5 text-gray-700 dark:text-gray-300 text-center">{{ (currentPage - 1) * perPage + index + 1 }}</td>
-          <td class="px-4 py-1.5">
-            <img v-if="brand.image" :src="getImageUrl(brand.image)" alt="" class="h-10 w-10 rounded-lg border border-gray-200 object-cover dark:border-gray-600" />
-            <div v-else class="h-10 w-10 rounded-lg border border-gray-200 bg-gray-200 dark:bg-gray-700 dark:border-gray-600 flex items-center justify-center">
+          <td class="px-4 py-1 text-gray-700 dark:text-gray-300 text-center">{{ (currentPage - 1) * perPage + index + 1 }}</td>
+          <td class="px-4 py-1">
+            <img v-if="brand.image" :src="getImageUrl(brand.image)" alt="" class="h-8 w-8 rounded-lg border border-gray-200 object-cover dark:border-gray-600" />
+            <div v-else class="h-8 w-8 rounded-lg border border-gray-200 bg-gray-200 dark:bg-gray-700 dark:border-gray-600 flex items-center justify-center">
               <ImageIcon class="text-gray-400 h-5 w-5" />
             </div>
           </td>
-          <td class="px-4 py-1.5 text-gray-800 dark:text-white">{{ brand.name }}</td>
-          <td class="px-4 py-1.5 text-gray-600 dark:text-gray-400">{{ brand.description || '-' }}</td>
-          <td class="px-4 py-1.5">
+          <td class="px-4 py-1 text-gray-800 dark:text-white">{{ brand.name }}</td>
+          <td class="px-4 py-1 text-gray-600 dark:text-gray-400">{{ brand.description || '-' }}</td>
+          <td class="px-4 py-1">
             <div class="flex items-center justify-center gap-1">
               <ViewButton @click="$emit('view', brand)" />
               <EditButton @click="$emit('edit', brand)" />

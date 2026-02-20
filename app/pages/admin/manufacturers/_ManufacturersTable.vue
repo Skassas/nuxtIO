@@ -1,0 +1,101 @@
+<template>
+  <div class="overflow-hidden rounded-lg border border-gray-200 bg-white dark:border-gray-700 dark:bg-gray-800">
+    <table class="w-full text-left text-sm">
+      <thead class="bg-gray-50 dark:bg-gray-700">
+        <tr>
+          <th class="px-4 py-4 font-semibold text-gray-600 dark:text-gray-300 w-16 uppercase text-xs text-center">Sıra</th>
+          <th class="px-4 py-4 font-semibold text-gray-600 dark:text-gray-300 uppercase text-xs align-middle" @click="$emit('sort', 'company')">
+            <span class="inline-flex items-center gap-1 cursor-pointer hover:text-blue-600 dark:hover:text-blue-400">
+              <SortIcon :active="sortBy === 'company'" :direction="sortBy === 'company' ? sortOrder : null" class="w-4 h-4" />
+              <span>Firma Adı</span>
+            </span>
+          </th>
+          <th class="px-4 py-4 font-semibold text-gray-600 dark:text-gray-300 uppercase text-xs">Yetkili Kişi</th>
+          <th class="px-4 py-4 font-semibold text-gray-600 dark:text-gray-300 uppercase text-xs">Telefon</th>
+          <th class="px-4 py-4 font-semibold text-gray-600 dark:text-gray-300 w-40 text-center uppercase text-xs"></th>
+        </tr>
+      </thead>
+      <tbody class="divide-y divide-gray-200 dark:divide-gray-700">
+        <tr v-if="loading" class="text-center">
+          <td colspan="5" class="px-4 py-8 text-gray-500 dark:text-gray-400">Yükleniyor...</td>
+        </tr>
+        <tr v-else-if="!manufacturers.length" class="text-center">
+          <td colspan="5" class="px-4 py-8 text-gray-500 dark:text-gray-400">Üretici bulunamadı</td>
+        </tr>
+        <tr v-for="(manufacturer, index) in manufacturers" :key="manufacturer.id" class="hover:bg-gray-100 dark:hover:bg-gray-700">
+          <td class="px-4 py-1 text-gray-700 dark:text-gray-300 text-center">{{ (currentPage - 1) * perPage + index + 1 }}</td>
+          <td class="px-4 py-1 text-gray-800 dark:text-white">{{ manufacturer.company }}</td>
+          <td class="px-4 py-1 text-gray-600 dark:text-gray-400">{{ manufacturer.owner || '-' }}</td>
+          <td class="px-4 py-1 text-gray-600 dark:text-gray-400">{{ formatPhone(manufacturer.phone) }}</td>
+          <td class="px-4 py-1">
+            <div class="flex items-center justify-center gap-1">
+              <ViewButton @click="$emit('view', manufacturer)" />
+              <EditButton @click="$emit('edit', manufacturer)" />
+              <DeleteButton :item-id="manufacturer.id" :item-name="manufacturer.company" :on-delete="(id) => $emit('delete', id)" />
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="mt-4 flex items-center justify-between">
+    <span class="text-sm text-gray-600 dark:text-gray-400">Toplam: {{ totalItems }} kayıt</span>
+    <div class="flex items-center gap-2">
+      <button :disabled="currentPage <= 1" @click="$emit('prevPage')"
+        class="rounded-lg border border-gray-300 bg-white px-3 py-1.5 text-sm text-gray-700 disabled:border-gray-200 disabled:bg-gray-100 disabled:text-gray-400 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:disabled:border-gray-600 dark:disabled:bg-gray-800 dark:disabled:text-gray-500">
+        Önceki
+      </button>
+      <span class="text-sm text-gray-600 dark:text-gray-400">{{ currentPage }} / {{ totalPages }}</span>
+      <button :disabled="currentPage >= totalPages" @click="$emit('nextPage')"
+        class="rounded-lg border border-gray-300 bg-white px-3 py-1.5 text-sm text-gray-700 disabled:border-gray-200 disabled:bg-gray-100 disabled:text-gray-400 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:disabled:border-gray-600 dark:disabled:bg-gray-800 dark:disabled:text-gray-500">
+        Sonraki
+      </button>
+    </div>
+  </div>
+</template>
+
+<script setup lang="ts">
+import SortIcon from '~/assets/svg/SortIcon.vue'
+
+export interface Manufacturer {
+  id: string
+  company: string
+  owner: string
+  phone: string
+  tax_office: string
+  tax_id: string
+  adress: string
+  created: string
+  updated: string
+}
+
+defineProps<{
+  manufacturers: Manufacturer[]
+  loading: boolean
+  currentPage: number
+  totalPages: number
+  perPage: number
+  totalItems: number
+  sortBy: 'company' | 'created'
+  sortOrder: 'asc' | 'desc'
+}>()
+
+defineEmits<{
+  view: [manufacturer: Manufacturer]
+  edit: [manufacturer: Manufacturer]
+  delete: [id: string]
+  prevPage: []
+  nextPage: []
+  sort: [field: 'company' | 'created']
+}>()
+
+function formatPhone(phone?: string) {
+  if (!phone) return '-'
+  const cleaned = phone.replace(/\D/g, '').slice(0, 10)
+  if (cleaned.length === 10) {
+    return `(${cleaned.slice(0, 3)}) ${cleaned.slice(3, 6)} ${cleaned.slice(6, 8)} ${cleaned.slice(8, 10)}`
+  }
+  return phone
+}
+</script>

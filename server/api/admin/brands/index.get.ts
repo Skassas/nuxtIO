@@ -3,7 +3,7 @@ export default defineEventHandler(async (event) => {
   const query = getQuery(event)
 
   const page = Number(query.page) || 1
-  const perPage = Number(query.perPage) || 20
+  const perPage = Number(query.perPage) || 10
   const search = (query.search as string) || ''
   const sort = (query.sort as string) || '-created'
 

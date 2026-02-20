@@ -7,8 +7,12 @@
       </div>
     </div>
     <div>
-      <label class="text-sm font-medium text-gray-500 dark:text-gray-400">Kategori Düzeni</label>
-      <p class="mt-1 text-gray-800 dark:text-white">{{ hierarchyPath }}</p>
+      <label class="text-sm font-medium text-gray-500 dark:text-gray-400">Üst Kategori</label>
+      <p class="mt-1 text-gray-800 dark:text-white">{{ category?.expand?.parent?.name || '-' }}</p>
+    </div>
+    <div>
+      <label class="text-sm font-medium text-gray-500 dark:text-gray-400">Kategori Adı</label>
+      <p class="mt-1 text-gray-800 dark:text-white">{{ category?.name }}</p>
     </div>
     <div>
       <label class="text-sm font-medium text-gray-500 dark:text-gray-400">Açıklama</label>
@@ -21,14 +25,6 @@
           {{ category?.status ? 'Aktif' : 'Pasif' }}
         </span>
       </p>
-    </div>
-    <div>
-      <label class="text-sm font-medium text-gray-500 dark:text-gray-400">Oluşturulma Tarihi</label>
-      <p class="mt-1 text-gray-800 dark:text-white">{{ formatDate(category?.created) }}</p>
-    </div>
-    <div>
-      <label class="text-sm font-medium text-gray-500 dark:text-gray-400">Son Güncelleme</label>
-      <p class="mt-1 text-gray-800 dark:text-white">{{ formatDate(category?.updated) }}</p>
     </div>
   </div>
 </template>
@@ -43,8 +39,6 @@ export interface Category {
   parent: string
   image: string
   status: boolean
-  created: string
-  updated: string
   expand?: {
     parent?: {
       name: string
@@ -56,28 +50,7 @@ const props = defineProps<{
   category: Category | null
 }>()
 
-// Build hierarchy path for the category
-const hierarchyPath = computed(() => {
-  if (!props.category) return '-'
-  
-  const path: string[] = [props.category.name]
-  let current = props.category
-  
-  // Since we don't have access to all categories here, we can only show one level up
-  // In a real scenario, you might want to pass all categories as a prop
-  if (current.expand?.parent) {
-    path.unshift(current.expand.parent.name)
-  }
-  
-  return path.join(' → ')
-})
-
 function getImageUrl(imageId: string) {
   return `/api/filemanager/files/fm_files/${imageId}`
-}
-
-function formatDate(dateStr?: string) {
-  if (!dateStr) return '-'
-  return new Date(dateStr).toLocaleString('tr-TR')
 }
 </script>

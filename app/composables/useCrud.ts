@@ -48,7 +48,7 @@ export function useCrud<T extends Record<string, any>>(
   const loading = ref(false)
   const searchQuery = ref('')
   const currentPage = ref(1)
-  const perPage = options.perPage ?? 9
+  const perPage = options.perPage ?? 10
   const totalPages = ref(1)
   const totalItems = ref(0)
   const sortBy = ref<'name' | 'created'>('name')
@@ -144,6 +144,20 @@ export function useCrud<T extends Record<string, any>>(
     drawerOpen.value = true
   }
 
+  async function openViewDrawerFetch(item: T & { id: string }) {
+    drawerMode.value = 'view'
+    loading.value = true
+    try {
+      const data = await $fetch(`/api/admin/${options.endpoint}/${item.id}`)
+      selectedItem.value = data as T
+    } catch (error) {
+      addToast(`${options.itemName} bilgileri yüklenirken hata oluştu`, 'error')
+    } finally {
+      loading.value = false
+    }
+    drawerOpen.value = true
+  }
+
   function openEditDrawer(item: T) {
     drawerMode.value = 'edit'
     selectedItem.value = item
@@ -230,6 +244,7 @@ export function useCrud<T extends Record<string, any>>(
     setSort,
     openCreateDrawer,
     openViewDrawer,
+    openViewDrawerFetch,
     openEditDrawer,
     closeDrawer,
     validateForm,

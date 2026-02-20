@@ -29,8 +29,8 @@
             </div>
           </td>
           <td class="px-4" :class="paddingClass">
-            <img v-if="item.image" :src="getFileUrl(item.image)" alt="" class="h-10 w-10 rounded-lg border border-gray-200 object-cover dark:border-gray-600" />
-            <div v-else class="h-10 w-10 rounded-lg border border-gray-200 bg-gray-200 dark:bg-gray-700 dark:border-gray-600 flex items-center justify-center">
+            <img v-if="item.image" :src="getFileUrl(item.image)" alt="" class="h-8 w-8 rounded-lg border border-gray-200 object-cover dark:border-gray-600" />
+            <div v-else class="h-8 w-8 rounded-lg border border-gray-200 bg-gray-200 dark:bg-gray-700 dark:border-gray-600 flex items-center justify-center">
               <ImageIcon class="text-gray-400 h-5 w-5" />
             </div>
           </td>
@@ -141,7 +141,7 @@ const hierarchicalCategories = computed((): HierarchicalCategory[] => {
 
 // Dynamic padding class based on perPage
 const paddingClass = computed(() => {
-  return 'py-[0.2rem]'
+  return 'py-1'
 })
 
 // Handle per page change

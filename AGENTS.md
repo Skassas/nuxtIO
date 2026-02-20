@@ -36,3 +36,149 @@
 - Aksi belirtilmedikçe ihtiyaç duyulan icon lar app/assets/icon dizini altında svg formatındakiler ise app/assets/svg altında yaratılsın. Buradan çağrılsın.
 - Yeni bir icon veya simge yaratmadan önce app/assets/svg klasörü altına bakılsın. Varsa buradaki kullanılsın.
 
+## Form Input Kuralları
+
+### String Tipindeki Inputlar (useTurkishInput)
+String tipindeki tüm form inputlarında `useTurkishInput` composable'ı kullanılır.
+
+**Özellikler:**
+- Sadece a-z, Türkçe karakterler (ğüşöçİĞÜŞÖÇ), 0-9, boşluk, tire (-) ve alt çizgi (_) kullanılır
+- Boşluk ile başlanamaz
+- İlk harf büyük (Türkçe karakterler dahil)
+
+**Kullanım:**
+```vue
+<script setup>
+import { useTurkishInput } from '~/composables/useTurkishInput'
+
+const myField = useTurkishInput(props.modelValue.myField || '')
+
+watch(() => form.value.myField, (val) => {
+  myField.inputValue.value = val
+})
+watch(myField.inputValue, (val) => {
+  form.value.myField = val
+})
+</script>
+
+<template>
+  <input 
+    :value="myField.inputValue.value" 
+    @input="(e) => { myField.handleInput(e); form.myField = myField.inputValue.value }" 
+    @keydown="myField.handleKeyDown" 
+  />
+</template>
+```
+
+### Telefon Input (usePhoneInput)
+Telefon inputları için telefon formatı uygulanır: `(5##) ### ## ##`
+
+**Özellikler:**
+- Giriş: `(5##) ### ## ##` formatında maskeleme
+- Gösterim: `(xxx) xxx xx xx` formatında gösterilir
+
+**Kullanım:**
+```vue
+<script setup>
+const phoneDisplay = ref(props.modelValue.phone || '')
+
+watch(() => props.modelValue.phone, (val) => {
+  if (!val) phoneDisplay.value = ''
+})
+
+function handlePhoneInput(e: Event) {
+  const input = e.target as HTMLInputElement
+  let value = input.value.replace(/\D/g, '').slice(0, 10)
+  
+  let formatted = ''
+  for (let i = 0; i < value.length; i++) {
+    if (i === 0) formatted += '('
+    if (i === 3) formatted += ') '
+    if (i === 6) formatted += ' '
+    if (i === 8) formatted += ' '
+    formatted += value[i]
+  }
+  
+  phoneDisplay.value = formatted
+  form.value.phone = value
+}
+
+// Tablo/View'da gösterim için
+function formatPhone(phone?: string) {
+  if (!phone) return '-'
+  const cleaned = phone.replace(/\D/g, '').slice(0, 10)
+  if (cleaned.length === 10) {
+    return `(${cleaned.slice(0, 3)}) ${cleaned.slice(3, 6)} ${cleaned.slice(6, 8)} ${cleaned.slice(8, 10)}`
+  }
+  return phone
+}
+</script>
+
+<template>
+  <input v-model="phoneDisplay" @input="handlePhoneInput" placeholder="(5__) ___ __ __" />
+  <!-- Tablo/View'da: {{ formatPhone(phone) }} -->
+</template>
+```
+
+### Numeric Input (useNumericInput)
+Sadece rakam girişi için kullanılır (quantity, number, price gibi alanlarda).
+
+**Özellikler:**
+- Sadece 0-9 rakamları kullanılır
+
+**Kullanım:**
+```vue
+<script setup>
+import { useNumericInput } from '~/composables/useNumericInput'
+
+const myField = useNumericInput(props.modelValue.myField?.toString() || '')
+
+watch(() => form.value.myField, (val) => {
+  myField.inputValue.value = val?.toString() || ''
+})
+watch(myField.inputValue, (val) => {
+  form.value.myField = val ? Number(val) : null
+})
+</script>
+
+<template>
+  <input 
+    :value="myField.inputValue.value" 
+    @input="(e) => { myField.handleInput(e); form.myField = myField.inputValue.value ? Number(myField.inputValue.value) : null }" 
+    @keydown="myField.handleKeyDown" 
+  />
+</template>
+```
+
+### Textarea Input (useTextareaInput)
+Textarea alanları için kullanılır. Tüm karakterlere izin verir.
+
+**Özellikler:**
+- Tüm karakterlere izin verir
+- Boşluk ile başlanamaz
+- İlk harf büyük (Türkçe karakterler dahil)
+
+**Kullanım:**
+```vue
+<script setup>
+import { useTextareaInput } from '~/composables/useTextareaInput'
+
+const myField = useTextareaInput(props.modelValue.myField || '')
+
+watch(() => form.value.myField, (val) => {
+  myField.inputValue.value = val
+})
+watch(myField.inputValue, (val) => {
+  form.value.myField = val
+})
+</script>
+
+<template>
+  <textarea 
+    :value="myField.inputValue.value" 
+    @input="(e) => { myField.handleInput(e); form.myField = myField.inputValue.value }" 
+    @keydown="myField.handleKeyDown" 
+  ></textarea>
+</template>
+```
+

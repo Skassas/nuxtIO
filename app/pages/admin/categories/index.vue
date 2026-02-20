@@ -23,7 +23,7 @@
 
     <CategoriesTable :categories="displayItems" :loading="loading" :current-page="tableCurrentPage" :total-pages="tableTotalPages" :per-page="tablePerPage" :total-items="allCategoriesForTable.length"
       :sort-by="sortBy" :sort-order="sortOrder" :is-search-mode="isSearchActive"
-      @view="openViewDrawer" @edit="openEditDrawer" @delete="handleDelete" @toggle-status="handleToggleStatus" @prev-page="tableCurrentPage--" @next-page="tableCurrentPage++" @sort="handleSort" @per-page-change="(val) => { tablePerPage = val; tableCurrentPage = 1; }" />
+      @view="openViewDrawerFetch" @edit="openEditDrawer" @delete="handleDelete" @toggle-status="handleToggleStatus" @prev-page="tableCurrentPage--" @next-page="tableCurrentPage++" @sort="handleSort" @per-page-change="(val) => { tablePerPage = val; tableCurrentPage = 1; }" />
 
     <AdminDrawer :isOpen="drawerOpen" :title="drawerTitle" :icon="drawerIcon" @close="closeDrawer">
       <CategoriesView v-if="drawerMode === 'view'" :category="selectedItem" />
@@ -97,7 +97,7 @@ const {
   search,
   setSort,
   openCreateDrawer: openCreateDrawerBase,
-  openViewDrawer,
+  openViewDrawerFetch,
   openEditDrawer: openEditDrawerBase,
   closeDrawer,
   handleSubmit,
