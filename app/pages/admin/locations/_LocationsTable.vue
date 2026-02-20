@@ -4,39 +4,32 @@
       <thead class="bg-gray-50 dark:bg-gray-700">
         <tr>
           <th class="px-4 py-4 font-semibold text-gray-800 dark:text-gray-200 w-16 uppercase text-xs text-center">Sıra</th>
-          <th class="px-4 py-4 font-semibold text-gray-800 dark:text-gray-200 uppercase text-xs align-middle" @click="$emit('sort', 'company')">
+          <th class="px-4 py-4 font-semibold text-gray-800 dark:text-gray-200 uppercase text-xs align-middle" @click="$emit('sort', 'name')">
             <span class="inline-flex items-center gap-1 cursor-pointer hover:text-blue-600 dark:hover:text-blue-400">
-              <SortIcon :active="sortBy === 'company'" :direction="sortBy === 'company' ? sortOrder : null" class="w-4 h-4" />
-              <span>Firma Adı</span>
+              <SortIcon :active="sortBy === 'name'" :direction="sortBy === 'name' ? sortOrder : null" class="w-4 h-4" />
+              <span>Konum Adı</span>
             </span>
           </th>
-          <th class="px-4 py-4 font-semibold text-gray-800 dark:text-gray-200 uppercase text-xs align-middle" @click="$emit('sort', 'owner')">
-            <span class="inline-flex items-center gap-1 cursor-pointer hover:text-blue-600 dark:hover:text-blue-400">
-              <SortIcon :active="sortBy === 'owner'" :direction="sortBy === 'owner' ? sortOrder : null" class="w-4 h-4" />
-              <span>Yetkili Kişi</span>
-            </span>
-          </th>
-          <th class="px-4 py-4 font-semibold text-gray-800 dark:text-gray-200 uppercase text-xs">Telefon</th>
+          <th class="px-4 py-4 font-semibold text-gray-800 dark:text-gray-200 uppercase text-xs">Açıklama</th>
           <th class="px-4 py-4 font-semibold text-gray-800 dark:text-gray-200 w-40 text-center uppercase text-xs"></th>
         </tr>
       </thead>
       <tbody class="divide-y divide-gray-200 dark:divide-gray-700">
         <tr v-if="loading" class="text-center">
-          <td colspan="5" class="px-4 py-8 text-gray-500 dark:text-gray-400">Yükleniyor...</td>
+          <td colspan="4" class="px-4 py-8 text-gray-500 dark:text-gray-400">Yükleniyor...</td>
         </tr>
-        <tr v-else-if="!manufacturers.length" class="text-center">
-          <td colspan="5" class="px-4 py-8 text-gray-500 dark:text-gray-400">Üretici bulunamadı</td>
+        <tr v-else-if="!locations.length" class="text-center">
+          <td colspan="4" class="px-4 py-8 text-gray-500 dark:text-gray-400">Konum bulunamadı</td>
         </tr>
-        <tr v-for="(manufacturer, index) in manufacturers" :key="manufacturer.id" class="hover:bg-gray-100 dark:hover:bg-gray-700">
+        <tr v-for="(location, index) in locations" :key="location.id" class="hover:bg-gray-100 dark:hover:bg-gray-700">
           <td class="px-4 py-1 text-gray-700 dark:text-gray-300 text-center">{{ (currentPage - 1) * perPage + index + 1 }}</td>
-          <td class="px-4 py-1 text-gray-800 dark:text-white">{{ manufacturer.company }}</td>
-          <td class="px-4 py-1 text-gray-600 dark:text-gray-400">{{ manufacturer.owner || '-' }}</td>
-          <td class="px-4 py-1 text-gray-600 dark:text-gray-400">{{ formatPhone(manufacturer.phone) }}</td>
+          <td class="px-4 py-1 text-gray-800 dark:text-white">{{ location.name }}</td>
+          <td class="px-4 py-1 text-gray-600 dark:text-gray-400">{{ location.description || '-' }}</td>
           <td class="px-4 py-1">
             <div class="flex items-center justify-center gap-1">
-              <ViewButton @click="$emit('view', manufacturer)" />
-              <EditButton @click="$emit('edit', manufacturer)" />
-              <DeleteButton :item-id="manufacturer.id" :item-name="manufacturer.company" :on-delete="(id) => $emit('delete', id)" />
+              <ViewButton @click="$emit('view', location)" />
+              <EditButton @click="$emit('edit', location)" />
+              <DeleteButton :item-id="location.id" :item-name="location.name" :on-delete="(id) => $emit('delete', id)" />
             </div>
           </td>
         </tr>
@@ -63,20 +56,16 @@
 <script setup lang="ts">
 import SortIcon from '~/assets/svg/SortIcon.vue'
 
-export interface Manufacturer {
+export interface Location {
   id: string
-  company: string
-  owner: string
-  phone: string
-  tax_office: string
-  tax_id: string
-  adress: string
+  name: string
+  description: string
   created: string
   updated: string
 }
 
 defineProps<{
-  manufacturers: Manufacturer[]
+  locations: Location[]
   loading: boolean
   currentPage: number
   totalPages: number
@@ -87,20 +76,11 @@ defineProps<{
 }>()
 
 defineEmits<{
-  view: [manufacturer: Manufacturer]
-  edit: [manufacturer: Manufacturer]
+  view: [location: Location]
+  edit: [location: Location]
   delete: [id: string]
   prevPage: []
   nextPage: []
   sort: [field: string]
 }>()
-
-function formatPhone(phone?: string) {
-  if (!phone) return '-'
-  const cleaned = phone.replace(/\D/g, '').slice(0, 10)
-  if (cleaned.length === 10) {
-    return `(${cleaned.slice(0, 3)}) ${cleaned.slice(3, 6)} ${cleaned.slice(6, 8)} ${cleaned.slice(8, 10)}`
-  }
-  return phone
-}
 </script>

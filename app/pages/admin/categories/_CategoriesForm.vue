@@ -7,12 +7,12 @@
       collection="categories"
     />
     <div>
-      <label class="mb-1 block text-sm font-medium text-gray-700 dark:text-gray-300">Üst Kategori <span class="text-red-500">*</span></label>
-      <select v-model="form.parent" :disabled="loading" required
+      <label class="mb-1 block text-sm font-medium text-gray-700 dark:text-gray-300">Üst Kategori</label>
+      <select v-model="form.parent" :disabled="loading"
         class="w-full rounded-lg border border-gray-300 px-4 py-2 text-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white font-mono disabled:opacity-50 disabled:cursor-not-allowed"
         :class="errors?.parent ? 'border-red-500' : ''">
         <option v-if="loading" value="">Kategoriler yükleniyor...</option>
-        <option v-else value="">Bir Kategori Seçin</option>
+        <option v-else value="">Ana Kategori (Üst Kategori Yok)</option>
         <option v-for="cat in hierarchicalOptions" :key="cat.id" :value="cat.id">
           {{ cat.indentation }}{{ cat.name }}
         </option>
@@ -44,6 +44,9 @@ import type { CategoryInput } from '~/validations/categories'
 import FileManagerGallery from '~/components/filemanager/FileManagerGallery.vue'
 import { useTurkishInput } from '~/composables/useTurkishInput'
 import { useTextareaInput } from '~/composables/useTextareaInput'
+import { useAutoFocus } from '~/composables/useAutoFocus'
+
+useAutoFocus()
 
 interface CategoryOption {
   id: string
@@ -70,7 +73,7 @@ const form = computed({
   set: (value) => emit('update:modelValue', value)
 })
 
-const nameInput = useTurkishInput(props.modelValue.name)
+const nameInput = useTurkishInput(props.modelValue.name || '', '')
 watch(() => form.value.name, (val) => {
   nameInput.inputValue.value = val
 })

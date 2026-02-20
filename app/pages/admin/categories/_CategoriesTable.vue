@@ -3,14 +3,14 @@
     <table class="w-full text-left text-sm">
       <thead class="bg-gray-50 dark:bg-gray-700">
         <tr>
-          <th class="px-4 py-4 font-semibold text-gray-600 dark:text-gray-300 uppercase text-xs">
+          <th class="px-4 py-4 font-semibold text-gray-800 dark:text-gray-200 uppercase text-xs">
             <span class="inline-flex items-center gap-1">
               <span>Kategori Düzeni</span>
             </span>
           </th>
-          <th class="px-4 py-4 font-semibold text-gray-600 dark:text-gray-300 w-24 uppercase text-xs text-left">Resim</th>
-          <th class="px-4 py-4 font-semibold text-gray-600 dark:text-gray-300 w-24 uppercase text-xs text-center">Durum</th>
-          <th class="px-4 py-4 font-semibold text-gray-600 dark:text-gray-300 w-40 text-center uppercase text-xs"></th>
+          <th class="px-4 py-4 font-semibold text-gray-800 dark:text-gray-200 w-24 uppercase text-xs text-left">Resim</th>
+          <th class="px-4 py-4 font-semibold text-gray-800 dark:text-gray-200 w-24 uppercase text-xs text-center">Durum</th>
+          <th class="px-4 py-4 font-semibold text-gray-800 dark:text-gray-200 w-40 text-center uppercase text-xs"></th>
         </tr>
       </thead>
       <tbody class="divide-y divide-gray-200 dark:divide-gray-700">

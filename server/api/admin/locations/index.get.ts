@@ -1,8 +1,23 @@
 import { createPBAdminClient } from '#server/utils/pocketbase'
 
+function normalizeForSearch(text: string): string {
+  const turkishChars: Record<string, string> = {
+    'ç': 'c', 'Ç': 'C',
+    'ğ': 'g', 'Ğ': 'G',
+    'ı': 'i', 'İ': 'I',
+    'ö': 'o', 'Ö': 'O',
+    'ş': 's', 'Ş': 'S',
+    'ü': 'u', 'Ü': 'U'
+  }
+  let normalized = text.toLowerCase()
+  for (const [turkish, ascii] of Object.entries(turkishChars)) {
+    normalized = normalized.replace(new RegExp(turkish, 'g'), ascii)
+  }
+  return normalized
+}
+
 export default defineEventHandler(async (event) => {
   const pb = await createPBAdminClient()
-  
   const query = getQuery(event)
 
   const page = Number(query.page) || 1
@@ -29,16 +44,16 @@ export default defineEventHandler(async (event) => {
       ? `(search_index ~ "${search.toLowerCase()}" || search_index ~ "${normalized}")` 
       : ''
     
-    const result = await pb.collection('manufacturers').getList(page, perPage, {
+    const result = await pb.collection('locations').getList(page, perPage, {
       sort,
       filter,
     })
     return result
   } catch (err: any) {
-    console.error('[manufacturers/index.get] PB hata:', err?.message || err)
+    console.error('[locations/index.get] PB hata:', err?.message || err)
     throw createError({
       statusCode: 500,
-      data: { error: 'SERVER_ERROR', message: 'Üreticiler getirilirken bir hata oluştu' },
+      data: { error: 'SERVER_ERROR', message: 'Konumlar getirilirken bir hata oluştu' },
     })
   }
 })

@@ -1,4 +1,4 @@
-export function useTurkishInput(defaultValue: string = '') {
+export function useTurkishInput(defaultValue: string = '', extraChars: string = '') {
   const inputValue = ref(defaultValue)
 
   const turkishUpperMap: Record<string, string> = {
@@ -14,7 +14,7 @@ export function useTurkishInput(defaultValue: string = '') {
     'I': 'ı'
   }
 
-  const allowedKeys = [
+  const baseAllowedKeys = [
     'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z',
     'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z',
     '0', '1', '2', '3', '4', '5', '6', '7', '8', '9',
@@ -22,6 +22,9 @@ export function useTurkishInput(defaultValue: string = '') {
     'ğ', 'Ğ', 'ü', 'Ü', 'ş', 'Ş', 'ö', 'Ö', 'ç', 'Ç', 'ı', 'İ',
     'Backspace', 'Delete', 'ArrowLeft', 'ArrowRight', 'ArrowUp', 'ArrowDown', 'Tab', 'Home', 'End'
   ]
+
+  const extraCharsArray = extraChars.split('').filter(c => c.trim())
+  const allowedKeys = [...baseAllowedKeys, ...extraCharsArray]
 
   function toTurkishUpper(char: string): string {
     return turkishUpperMap[char] || char.toUpperCase()
@@ -32,7 +35,16 @@ export function useTurkishInput(defaultValue: string = '') {
   }
 
   function formatInput(value: string): string {
-    let filtered = value.replace(/[^a-zA-Z0-9ğüşöçİĞÜŞÖÇ\u0131 _-]/g, '')
+    let regexPattern: string
+    if (extraChars) {
+      const escapeRegExp = (str: string) => str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
+      const extraEscaped = extraChars.split('').map(escapeRegExp).join('')
+      regexPattern = `[^a-zA-Z0-9ğüşöçİĞÜŞÖÇıİ ${extraEscaped}_-]`
+    } else {
+      regexPattern = '[^a-zA-Z0-9ğüşöçİĞÜŞÖÇıİ _-]'
+    }
+    
+    let filtered = value.replace(new RegExp(regexPattern), '')
     filtered = filtered.replace(/^\s+/g, '')
     filtered = filtered.split('').map(c => toTurkishLower(c)).join('')
     if (filtered.length > 0) {

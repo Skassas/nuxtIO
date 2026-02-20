@@ -109,6 +109,9 @@ import { useTurkishInput } from '~/composables/useTurkishInput'
 import { useTurkishLettersOnly } from '~/composables/useTurkishLettersOnly'
 import { useTextareaInput } from '~/composables/useTextareaInput'
 import { useNumericInput } from '~/composables/useNumericInput'
+import { useAutoFocus } from '~/composables/useAutoFocus'
+
+useAutoFocus()
 
 const props = defineProps<{
   modelValue: CustomerInput
@@ -126,7 +129,7 @@ const form = computed({
   set: (value) => emit('update:modelValue', value)
 })
 
-const firstNameInput = useTurkishInput(props.modelValue.first_name || '')
+const firstNameInput = useTurkishInput(props.modelValue.first_name || '', '')
 watch(() => form.value.first_name, (val) => {
   firstNameInput.inputValue.value = val
 })
@@ -134,7 +137,7 @@ watch(firstNameInput.inputValue, (val) => {
   form.value.first_name = val
 })
 
-const lastNameInput = useTurkishInput(props.modelValue.last_name || '')
+const lastNameInput = useTurkishInput(props.modelValue.last_name || '', '')
 watch(() => form.value.last_name, (val) => {
   lastNameInput.inputValue.value = val
 })
@@ -150,7 +153,7 @@ watch(billingAddressInput.inputValue, (val) => {
   form.value.billing_address = val
 })
 
-const companyNameInput = useTurkishInput(props.modelValue.company_name || '')
+const companyNameInput = useTurkishInput(props.modelValue.company_name || '', '')
 watch(() => form.value.company_name, (val) => {
   companyNameInput.inputValue.value = val
 })

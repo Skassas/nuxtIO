@@ -21,6 +21,9 @@ import { unitSchema } from '~/validations/units'
 import type { UnitInput } from '~/validations/units'
 import { useTurkishInput } from '~/composables/useTurkishInput'
 import { useTextareaInput } from '~/composables/useTextareaInput'
+import { useAutoFocus } from '~/composables/useAutoFocus'
+
+useAutoFocus()
 
 const props = defineProps<{
   modelValue: UnitInput
@@ -37,7 +40,7 @@ const form = computed({
   set: (value) => emit('update:modelValue', value)
 })
 
-const nameInput = useTurkishInput(props.modelValue.name)
+const nameInput = useTurkishInput(props.modelValue.name || '', '')
 watch(() => form.value.name, (val) => {
   nameInput.inputValue.value = val
 })

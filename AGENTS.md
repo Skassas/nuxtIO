@@ -40,10 +40,11 @@
 ## Form Input Kuralları
 
 ### String Tipindeki Inputlar (useTurkishInput)
-String tipindeki tüm form inputlarında `useTurkishInput` composable'ı kullanılır.
+String tipindeki tüm form inputlarında `useTurkishInput` composable'ı kullanılır. İkinci parametre olarak istenilen karakterler eklenebilir.
 
 **Özellikler:**
 - Sadece a-z, Türkçe karakterler (ğüşöçİĞÜŞÖÇ), 0-9, boşluk, tire (-) ve alt çizgi (_) kullanılır
+- İkinci parametre ile ek karakterler desteklenir (örn: vergi adı için '%')
 - Boşluk ile başlanamaz
 - İlk harf büyük (Türkçe karakterler dahil)
 
@@ -52,7 +53,11 @@ String tipindeki tüm form inputlarında `useTurkishInput` composable'ı kullan�
 <script setup>
 import { useTurkishInput } from '~/composables/useTurkishInput'
 
+// Normal kullanım
 const myField = useTurkishInput(props.modelValue.myField || '')
+
+// Ek karakter ile kullanım (örn: vergi adı için %)
+const taxNameField = useTurkishInput(props.modelValue.taxName || '', '%')
 
 watch(() => form.value.myField, (val) => {
   myField.inputValue.value = val
@@ -177,6 +182,7 @@ watch(myField.inputValue, (val) => {
 - Boşluktan sonra gelen kelimenin ilk harfi artık büyük yapılıyor
 - Türkçe İ harfi sorunu düzeltildi (ı -> I yerine İ kullanımı)
 - Türkçe küçük harf dönüşümü eklendi (İ -> i, I -> ı)
+- İkinci parametre ile ek karakter desteği eklendi (örn: vergi adı için '%')
 
 ### Sort Sistemi İyileştirmeleri
 - `useCrud.ts` içinde `sortBy` tipi `'name' | 'created'` yerine `string` olarak değiştirildi

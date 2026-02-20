@@ -3,21 +3,21 @@
     <table class="w-full text-left text-sm">
       <thead class="bg-gray-50 dark:bg-gray-700">
         <tr>
-          <th class="px-4 py-4 font-semibold text-gray-600 dark:text-gray-300 uppercase text-xs text-center">Sıra</th>
-          <th class="px-4 py-4 font-semibold text-gray-600 dark:text-gray-300 uppercase text-xs align-middle" @click="$emit('sort', 'first_name')">
+          <th class="px-4 py-4 font-semibold text-gray-800 dark:text-gray-200 uppercase text-xs text-center">Sıra</th>
+          <th class="px-4 py-4 font-semibold text-gray-800 dark:text-gray-200 uppercase text-xs align-middle" @click="$emit('sort', 'first_name')">
             <span class="inline-flex items-center gap-1 cursor-pointer hover:text-blue-600 dark:hover:text-blue-400">
               <SortIcon :active="sortBy === 'first_name'" :direction="sortBy === 'first_name' ? sortOrder : null" class="w-4 h-4" />
               <span>Müşteri Bilgileri</span>
             </span>
           </th>
-          <th class="px-4 py-4 font-semibold text-gray-600 dark:text-gray-300 uppercase text-xs">Telefon</th>
-          <th class="px-4 py-4 font-semibold text-gray-600 dark:text-gray-300 w-32 uppercase text-xs text-center whitespace-nowrap" @click="$emit('sort', 'customer_type')">
+          <th class="px-4 py-4 font-semibold text-gray-800 dark:text-gray-200 uppercase text-xs">Telefon</th>
+          <th class="px-4 py-4 font-semibold text-gray-800 dark:text-gray-200 w-32 uppercase text-xs text-center whitespace-nowrap" @click="$emit('sort', 'customer_type')">
             <span class="inline-flex items-center gap-1 cursor-pointer hover:text-blue-600 dark:hover:text-blue-400">
               <SortIcon :active="sortBy === 'customer_type'" :direction="sortBy === 'customer_type' ? sortOrder : null" class="w-4 h-4" />
               <span>MÜŞTERİ TİPİ</span>
             </span>
           </th>
-          <th class="px-4 py-4 font-semibold text-gray-600 dark:text-gray-300 w-40 text-center uppercase text-xs"></th>
+          <th class="px-4 py-4 font-semibold text-gray-800 dark:text-gray-200 w-40 text-center uppercase text-xs"></th>
         </tr>
       </thead>
       <tbody class="divide-y divide-gray-200 dark:divide-gray-700">

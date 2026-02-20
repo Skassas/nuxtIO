@@ -42,6 +42,9 @@ import type { ManufacturerInput } from '~/validations/manufacturers'
 import { useTurkishInput } from '~/composables/useTurkishInput'
 import { useTurkishLettersOnly } from '~/composables/useTurkishLettersOnly'
 import { useNumericInput } from '~/composables/useNumericInput'
+import { useAutoFocus } from '~/composables/useAutoFocus'
+
+useAutoFocus()
 
 const props = defineProps<{
   modelValue: ManufacturerInput
@@ -58,7 +61,7 @@ const form = computed({
   set: (value) => emit('update:modelValue', value)
 })
 
-const companyInput = useTurkishInput(props.modelValue.company)
+const companyInput = useTurkishInput(props.modelValue.company || '', '')
 watch(() => form.value.company, (val) => {
   companyInput.inputValue.value = val
 })
@@ -66,7 +69,7 @@ watch(companyInput.inputValue, (val) => {
   form.value.company = val
 })
 
-const ownerInput = useTurkishInput(props.modelValue.owner)
+const ownerInput = useTurkishInput(props.modelValue.owner || '', '')
 watch(() => form.value.owner, (val) => {
   ownerInput.inputValue.value = val
 })

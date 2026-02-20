@@ -1,15 +1,9 @@
 <template>
-  <form id="brand-form" @submit.prevent="$emit('submit', form)" class="space-y-4">
-    <FileManagerGallery 
-      v-model="form.image" 
-      :multiple="false" 
-      label="Marka Resmi"
-      collection="brands"
-    />
+  <form id="location-form" @submit.prevent="$emit('submit', form)" class="space-y-4">
     <div>
-      <label class="mb-1 block text-sm font-medium text-gray-700 dark:text-gray-300">Marka Adı <span
+      <label class="mb-1 block text-sm font-medium text-gray-700 dark:text-gray-300">Konum Adı <span
           class="text-red-500">*</span></label>
-      <input :value="nameInput.inputValue.value" @input="(e) => { nameInput.handleInput(e); form.name = nameInput.inputValue.value }" @keydown="nameInput.handleKeyDown" type="text" required minlength="2" placeholder="Marka adını girin"
+      <input :value="nameInput.inputValue.value" @input="(e) => { nameInput.handleInput(e); form.name = nameInput.inputValue.value }" @keydown="nameInput.handleKeyDown" type="text" required minlength="2" placeholder="Konum adını girin"
         class="w-full rounded-lg border border-gray-300 px-4 py-2 text-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white"
         :class="errors?.name ? 'border-red-500' : ''" />
       <p v-if="errors?.name" class="mt-1 text-xs text-red-500">{{ errors.name }}</p>
@@ -23,9 +17,8 @@
 </template>
 
 <script setup lang="ts">
-import { brandSchema } from '~/validations/brands'
-import type { BrandInput } from '~/validations/brands'
-import FileManagerGallery from '~/components/filemanager/FileManagerGallery.vue'
+import { locationSchema } from '~/validations/locations'
+import type { LocationInput } from '~/validations/locations'
 import { useTurkishInput } from '~/composables/useTurkishInput'
 import { useTextareaInput } from '~/composables/useTextareaInput'
 import { useAutoFocus } from '~/composables/useAutoFocus'
@@ -33,13 +26,13 @@ import { useAutoFocus } from '~/composables/useAutoFocus'
 useAutoFocus()
 
 const props = defineProps<{
-  modelValue: BrandInput
+  modelValue: LocationInput
   errors?: Record<string, string>
 }>()
 
 const emit = defineEmits<{
-  'update:modelValue': [value: BrandInput]
-  submit: [form: BrandInput]
+  'update:modelValue': [value: LocationInput]
+  submit: [form: LocationInput]
 }>()
 
 const form = computed({
@@ -55,7 +48,7 @@ watch(nameInput.inputValue, (val) => {
   form.value.name = val
 })
 
-const descInput = useTextareaInput(props.modelValue.description)
+const descInput = useTextareaInput(props.modelValue.description || '')
 watch(() => form.value.description, (val) => {
   descInput.inputValue.value = val
 })
