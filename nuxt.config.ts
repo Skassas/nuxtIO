@@ -23,4 +23,9 @@ export default defineNuxtConfig({
       title: 'NuxtIO Admin',
     },
   },
+
+  routeRules: {
+    '/admin/**': { middleware: ['auth', 'install'] },
+    '/login': { middleware: ['auth'] },
+  },
 })
