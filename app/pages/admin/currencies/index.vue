@@ -14,6 +14,11 @@
           </button>
         </div>
       </div>
+      <button @click="handleRefreshAll" :disabled="refreshingAll"
+        class="flex items-center gap-2 rounded-lg bg-green-600 px-4 py-2 text-sm font-medium text-white transition hover:bg-green-700 disabled:opacity-50">
+        <RefreshIcon class="w-4 h-4" :class="{ 'animate-spin': refreshingAll }" />
+        Kurları Güncelle
+      </button>
       <button @click="openCreateDrawer"
         class="flex items-center gap-2 rounded-lg bg-blue-600 px-4 py-2 text-sm font-medium text-white transition hover:bg-blue-700">
         <PlusIcon />
@@ -22,8 +27,8 @@
     </div>
 
     <CurrenciesTable :currencies="items" :loading="loading" :current-page="currentPage" :total-pages="totalPages" :per-page="perPage" :total-items="totalItems"
-      :sort-by="sortBy" :sort-order="sortOrder"
-      @view="openViewDrawer" @edit="openEditDrawer" @delete="handleDelete" @prev-page="currentPage--" @next-page="currentPage++" @sort="setSort" />
+      :sort-by="sortBy" :sort-order="sortOrder" :refreshing-id="refreshingId"
+      @view="openViewDrawerFetch" @edit="openEditDrawer" @delete="handleDelete" @refresh="handleRefresh" @prev-page="currentPage--" @next-page="currentPage++" @sort="setSort" />
 
     <AdminDrawer :isOpen="drawerOpen" :title="drawerTitle" :icon="drawerIcon" @close="closeDrawer">
       <CurrenciesView v-if="drawerMode === 'view'" :currency="selectedItem" />
@@ -55,6 +60,7 @@
 <script setup lang="ts">
 import PlusIcon from '~/assets/svg/PlusIcon.vue'
 import SearchIcon from '~/assets/svg/SearchIcon.vue'
+import RefreshIcon from '~/assets/svg/RefreshIcon.vue'
 import CurrencyIcon from '~/assets/svg/CurrencyIcon.vue'
 import CurrenciesTable from './_CurrenciesTable.vue'
 import CurrenciesForm from './_CurrenciesForm.vue'
@@ -88,17 +94,68 @@ const {
   setSort,
   openCreateDrawer,
   openViewDrawer,
+  openViewDrawerFetch,
   openEditDrawer,
   closeDrawer,
   handleSubmit,
   handleDelete,
 } = useCrud<Currency>({
   endpoint: 'currencies',
-  defaultForm: { currencyName: '', currencyCode: '', currencySymbol: '', currencyValue: '' },
+  defaultForm: { currencyName: '', currencyCode: '', currencySymbol: '', currencyValue: '', currencyAutoUpdate: true },
   validationSchema: currencySchema,
   itemName: 'Para Birimi',
   icon: CurrencyIcon,
 })
+
+import { useToast } from '~/composables/useToast'
+
+const { addToast } = useToast()
+
+const refreshingId = ref<string | null>(null)
+const refreshingAll = ref(false)
+
+async function handleRefreshAll() {
+  refreshingAll.value = true
+  try {
+    const currenciesToUpdate = items.value.filter(c => c.currency_auto_update === true)
+    console.log('Currencies to update:', currenciesToUpdate)
+    let successCount = 0
+    for (const currency of currenciesToUpdate) {
+      try {
+        await $fetch(`/api/admin/currencies/${currency.id}/refresh`, {
+          method: 'POST',
+        })
+        successCount++
+      } catch (e) {
+        console.error(`Failed to refresh ${currency.currency_code}:`, e)
+      }
+    }
+    addToast(`${successCount} döviz kuru güncellendi`, 'success')
+    await fetchItems()
+  } catch (error: any) {
+    addToast(error?.data?.message || 'Güncelleme sırasında hata oluştu', 'error')
+  } finally {
+    refreshingAll.value = false
+  }
+}
+
+async function handleRefresh(currency: Currency) {
+  refreshingId.value = currency.id
+  try {
+    const updated = await $fetch(`/api/admin/currencies/${currency.id}/refresh`, {
+      method: 'POST',
+    })
+    addToast('Döviz kuru güncellendi', 'success')
+    await fetchItems()
+    if (selectedItem.value?.id === currency.id) {
+      selectedItem.value = updated as Currency
+    }
+  } catch (error: any) {
+    addToast(error?.data?.message || 'Güncelleme sırasında hata oluştu', 'error')
+  } finally {
+    refreshingId.value = null
+  }
+}
 
 onMounted(async () => {
   await fetchItems()

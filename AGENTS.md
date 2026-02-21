@@ -2,7 +2,12 @@
 
 ## GitHub İşlemleri
 - **Hiçbir zaman sormadan GitHub'a push etme.** Kullanıcı açıkça istemeden commit/push yapma.
-- Değişiklikleri commit etmeden önce kullanıcıya sor.
+- Değişiklikleri commit etmeden önce kullanıcıya sor. 
+- Değişikleri her zaman Türkçe olarak açıkla ve commit mesajını Türkçe olarak yaz.
+
+## Değişken Tanımları
+- Frontend ve Backend için değişken tanımlarken camelCase formarını kullan. Bu formatın dışında tanımlama yapma. Daha önceden   tanımlaşı varsa tüm projeyi tarayarak gerekli düzeltmeleri yap.
+- DB de ise tablo alan adları snake_case (örn: first_name) olarak tanımlanmış olup bu şekilde kullanılmasına izin ver.
 
 ## Database Dosyaları
 - **BU PROJE İÇİN GEÇERLİ DEĞİL**: Kullanıcı GitHub'ı yedek olarak kullanıyor, kodlar public olunca silinecek.
@@ -20,7 +25,6 @@
 
 ## Kod Stili
 - Mevcut kod stilini takip et.
-- Ekstra yorum ekleme (kullanıcı istemeden).
 - Var olan dosyaları düzenlerken mevcut yapıyı koru.
 
 ## Test ve Build

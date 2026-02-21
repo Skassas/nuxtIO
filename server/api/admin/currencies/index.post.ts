@@ -1,4 +1,5 @@
 import { currencySchema } from '../../../validations/currencies'
+import { formatCurrencyValue } from '../../../utils/currencyFormatter'
 
 function normalizeForSearch(text: string): string {
   const turkishChars: Record<string, string> = {
@@ -38,11 +39,15 @@ export default defineEventHandler(async (event) => {
   const searchIndex = normalizeForSearch(name)
 
   try {
+    // Para birimi değerini formatla (2 ondalık basamağa sınırla)
+    const formattedValue = formatCurrencyValue(body.currencyValue, 2)
+    
     const record = await pb.collection('currencies').create({
       currency_name: body.currencyName?.trim() || '',
       currency_code: body.currencyCode?.trim() || '',
       currency_symbol: body.currencySymbol?.trim() || '',
-      currency_value: body.currencyValue?.trim() || '',
+      currency_value: formattedValue,
+      currency_auto_update: body.currencyAutoUpdate !== undefined ? body.currencyAutoUpdate : true,
       search_index: searchIndex,
     })
     return record
