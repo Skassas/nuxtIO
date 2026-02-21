@@ -21,12 +21,9 @@ export default defineEventHandler(async (event) => {
   const pb = await createPBAdminClient()
   const body = await readBody(event)
 
-  console.log('[currencies post] body:', JSON.stringify(body))
-
   try {
     currencySchema.parse(body)
   } catch (error: any) {
-    console.log('[currencies post] validation error:', error)
     const zodError = error.errors || error.issues || []
     const firstError = zodError[0]
     throw createError({

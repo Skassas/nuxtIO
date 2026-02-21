@@ -118,7 +118,6 @@ async function handleRefreshAll() {
   refreshingAll.value = true
   try {
     const currenciesToUpdate = items.value.filter(c => c.currency_auto_update === true)
-    console.log('Currencies to update:', currenciesToUpdate)
     let successCount = 0
     for (const currency of currenciesToUpdate) {
       try {

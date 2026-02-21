@@ -32,7 +32,6 @@ export default defineEventHandler(async (event) => {
   try {
     currencySchema.parse(body)
   } catch (error: any) {
-    console.log('[currencies put] validation error:', error)
     const zodError = error.errors || error.issues || []
     const firstError = zodError[0]
     throw createError({
