@@ -21,6 +21,7 @@ interface UseCrudOptions<T> {
   itemName: string
   icon?: Component
   perPage?: number
+  defaultSortBy?: string
 }
 
 interface UseCrudReturn<T> {
@@ -64,7 +65,7 @@ export function useCrud<T extends Record<string, any>>(
   const perPage = options.perPage ?? 10
   const totalPages = ref(1)
   const totalItems = ref(0)
-  const sortBy = ref<string>('name')
+  const sortBy = ref<string>(options.defaultSortBy || 'name')
   const sortOrder = ref<'asc' | 'desc'>('asc')
 
   const drawerOpen = ref(false)

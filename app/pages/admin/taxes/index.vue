@@ -94,10 +94,11 @@ const {
   handleDelete,
 } = useCrud<Tax>({
   endpoint: 'taxes',
-  defaultForm: { name: '', ratio: '', description: '' },
+  defaultForm: { tax_name: '', tax_ratio: '', tax_description: '' },
   validationSchema: taxSchema,
   itemName: 'Vergi',
   icon: TaxIcon,
+  defaultSortBy: 'tax_name',
 })
 
 onMounted(async () => {

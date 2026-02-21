@@ -94,10 +94,11 @@ const {
   handleDelete,
 } = useCrud<Location>({
   endpoint: 'locations',
-  defaultForm: { name: '', description: '' },
+  defaultForm: { location_name: '', location_description: '' },
   validationSchema: locationSchema,
   itemName: 'Mağaza',
   icon: LocationIcon,
+  defaultSortBy: 'location_name',
 })
 
 onMounted(async () => {

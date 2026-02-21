@@ -38,11 +38,11 @@ export default defineEventHandler(async (event) => {
     })
   }
 
-  const firstName = body.first_name?.trim() || ''
-  const lastName = body.last_name?.trim() || ''
-  const companyName = body.company_name?.trim() || ''
-  const phone = body.phone?.trim() || ''
-  const companyPhone = body.company_phone?.trim() || ''
+  const firstName = body.customer_first_name?.trim() || ''
+  const lastName = body.customer_last_name?.trim() || ''
+  const companyName = body.customer_company_name?.trim() || ''
+  const phone = body.customer_phone?.trim() || ''
+  const companyPhone = body.customer_company_phone?.trim() || ''
   
   const searchText = [
     firstName, lastName, companyName, phone, companyPhone
@@ -53,17 +53,18 @@ export default defineEventHandler(async (event) => {
   try {
     const record = await pb.collection('customers').update(id, {
       customer_type: body.customer_type,
-      tckn: body.tckn?.trim() || '',
-      first_name: firstName,
-      last_name: lastName,
-      phone: phone,
-      billing_address: body.billing_address?.trim() || '',
-      description: body.description?.trim() || '',
-      company_name: companyName,
-      company_phone: companyPhone,
-      company_tax_city: body.company_tax_city?.trim() || '',
-      company_tax_id: body.company_tax_id?.trim() || '',
-      company_description: body.company_description?.trim() || '',
+      customer_tckn: body.customer_tckn?.trim() || '',
+      customer_first_name: firstName,
+      customer_last_name: lastName,
+      customer_phone: phone,
+      customer_billing_adress: body.customer_billing_adress?.trim() || '',
+      customer_description: body.customer_description?.trim() || '',
+      customer_company_name: companyName,
+      customer_company_phone: companyPhone,
+      customer_company_tax_city: body.customer_company_tax_city?.trim() || '',
+      customer_company_tax_id: body.customer_company_tax_id?.trim() || '',
+      customer_company_address: body.customer_company_address?.trim() || '',
+      customer_company_description: body.customer_company_description?.trim() || '',
       search_index: searchIndex,
     })
     return record

@@ -8,9 +8,9 @@
               <span>Kategori Düzeni</span>
             </span>
           </th>
-          <th class="px-4 py-4 font-semibold text-gray-800 dark:text-gray-200 w-24 uppercase text-xs text-left">Resim</th>
-          <th class="px-4 py-4 font-semibold text-gray-800 dark:text-gray-200 w-24 uppercase text-xs text-center">Durum</th>
-          <th class="px-4 py-4 font-semibold text-gray-800 dark:text-gray-200 w-40 text-center uppercase text-xs"></th>
+          <th class="px-4 py-4 font-semibold text-gray-800 dark:text-gray-200 w-24 uppercase text-xs text-left hidden md:table-cell">Resim</th>
+          <th class="px-4 py-4 font-semibold text-gray-800 dark:text-gray-200 w-24 uppercase text-xs text-center hidden md:table-cell">Durum</th>
+          <th class="px-4 py-4 font-semibold text-gray-800 dark:text-gray-200 w-40 text-center uppercase text-xs bg-transparent"></th>
         </tr>
       </thead>
       <tbody class="divide-y divide-gray-200 dark:divide-gray-700">
@@ -24,18 +24,18 @@
           <td class="px-4" :class="paddingClass">
             <div class="flex items-center" :class="{ 'font-bold': !isSearchMode && item.level === 0 }">
               <span v-if="!isSearchMode && item.level > 0" class="text-gray-800 dark:text-white font-mono mr-1" v-html="getIndentationString(item)"></span>
-              <span class="text-gray-800 dark:text-white">{{ item.name }}</span>
+              <span class="text-gray-800 dark:text-white">{{ item.category_name }}</span>
             </div>
           </td>
-          <td class="px-4" :class="paddingClass">
-            <img v-if="item.image" :src="getFileUrl(item.image)" alt="" class="h-10 w-10 rounded-lg border border-gray-200 object-cover dark:border-gray-600" />
+          <td class="px-4 hidden md:table-cell" :class="paddingClass">
+            <img v-if="item.category_image" :src="getFileUrl(item.category_image)" alt="" class="h-10 w-10 rounded-lg border border-gray-200 object-cover dark:border-gray-600" />
             <div v-else class="h-10 w-10 rounded-lg border border-gray-200 bg-gray-200 dark:bg-gray-700 dark:border-gray-600 flex items-center justify-center">
               <ImageIcon class="text-gray-400 h-5 w-5" />
             </div>
           </td>
-          <td class="px-4 text-center" :class="paddingClass">
-            <button @click="$emit('toggleStatus', item)" :class="item.status ? 'bg-green-500 hover:bg-green-600' : 'bg-red-500 hover:bg-red-600'" class="px-3 py-1.5 rounded text-xs text-white font-medium transition-colors min-w-[60px]">
-              {{ item.status ? 'Aktif' : 'Pasif' }}
+          <td class="px-4 text-center hidden md:table-cell" :class="paddingClass">
+            <button @click="$emit('toggleStatus', item)" :class="item.category_status ? 'bg-green-500 hover:bg-green-600' : 'bg-red-500 hover:bg-red-600'" class="px-3 py-1.5 rounded text-xs text-white font-medium transition-colors min-w-[60px]">
+              {{ item.category_status ? 'Aktif' : 'Pasif' }}
             </button>
           </td>
           <td class="px-4" :class="paddingClass">
@@ -50,8 +50,8 @@
     </table>
   </div>
 
-  <div class="mt-4 flex items-center justify-between">
-    <span class="text-sm text-gray-600 dark:text-gray-400">Toplam: {{ totalItems }} kayıt</span>
+  <div class="mt-4 flex items-center justify-end md:justify-between">
+    <span class="text-sm text-gray-600 dark:text-gray-400 hidden md:inline">Toplam: {{ totalItems }} kayıt</span>
     <div class="flex items-center gap-2">
       <div class="flex items-center gap-2 mr-4">
         <label class="text-sm text-gray-600 dark:text-gray-400 whitespace-nowrap">Göster:</label>
@@ -84,11 +84,11 @@ import ImageIcon from '~/assets/svg/ImageIcon.vue'
 
 export interface Category {
   id: string
-  name: string
-  description: string
+  category_name: string
+  category_description: string
   parent: string
-  image: string
-  status: boolean
+  category_image: string
+  category_status: boolean
   created: string
   updated: string
   level?: number
@@ -97,7 +97,7 @@ export interface Category {
   expand?: {
     parent?: {
       id: string
-      name: string
+      category_name: string
     }
   }
 }

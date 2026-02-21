@@ -35,23 +35,23 @@ export default defineEventHandler(async (event) => {
     })
   }
 
-  const nameField = formData.find(f => f.name === 'name')
+  const nameField = formData.find(f => f.name === 'category_name')
   const name = nameField?.value ? nameField.value : (nameField?.data ? Buffer.from(nameField.data).toString('utf-8') : undefined)
-  const descriptionField = formData.find(f => f.name === 'description')
+  const descriptionField = formData.find(f => f.name === 'category_description')
   const description = descriptionField?.value ? descriptionField.value : (descriptionField?.data ? Buffer.from(descriptionField.data).toString('utf-8') : undefined)
   const parentField = formData.find(f => f.name === 'parent')
   const parent = parentField?.value ? parentField.value : (parentField?.data ? Buffer.from(parentField.data).toString('utf-8') : undefined)
-  const statusField = formData.find(f => f.name === 'status')
+  const statusField = formData.find(f => f.name === 'category_status')
   const status = statusField?.value ? statusField.value : (statusField?.data ? Buffer.from(statusField.data).toString('utf-8') : 'true')
-  const image = formData.find(f => f.name === 'image')
+  const image = formData.find(f => f.name === 'category_image')
   const imageId = formData.find(f => f.name === 'image_id')
 
   const formDataParsed = {
-    name: name?.trim() || '',
-    description: description?.trim() || '',
+    category_name: name?.trim() || '',
+    category_description: description?.trim() || '',
     parent: parent?.trim() || '',
-    image: '',
-    status: status === 'true',
+    category_image: '',
+    category_status: status === 'true',
   }
 
   try {
@@ -68,17 +68,17 @@ export default defineEventHandler(async (event) => {
 
   try {
     const data: Record<string, any> = {
-      name: name?.trim(),
-      description: description?.trim() || '',
+      category_name: name?.trim(),
+      category_description: description?.trim() || '',
       parent: parent?.trim() || null,
-      status: status === 'true',
+      category_status: status === 'true',
       search_index: searchIndex,
     }
 
     if (image) {
       const imageValue = image.value ? image.value : (image.data ? Buffer.from(image.data).toString('utf-8') : undefined)
       if (imageValue === 'null' || imageValue === '') {
-        data.image = null
+        data.category_image = null
       } else if (image.data && image.data.length > 0) {
         const fileBuffer = Buffer.from(image.data)
         const fileName = image.filename || 'upload.jpg'
@@ -88,16 +88,16 @@ export default defineEventHandler(async (event) => {
         fileFormData.append('name', fileName)
         
         const record = await pb.collection('fm_files').create(fileFormData)
-        data.image = record.id
+        data.category_image = record.id
       }
     }
     
     if (imageId) {
       const imageIdValue = imageId.value ? imageId.value : (imageId.data ? Buffer.from(imageId.data).toString('utf-8') : undefined)
       if (imageIdValue && typeof imageIdValue === 'string' && imageIdValue.length > 0) {
-        data.image = imageIdValue
+        data.category_image = imageIdValue
       } else if (imageIdValue === '') {
-        data.image = null
+        data.category_image = null
       }
     }
 

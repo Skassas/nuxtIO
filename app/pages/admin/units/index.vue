@@ -94,10 +94,11 @@ const {
   handleDelete,
 } = useCrud<Unit>({
   endpoint: 'units',
-  defaultForm: { name: '', description: '' },
+  defaultForm: { unit_name: '', unit_decription: '' },
   validationSchema: unitSchema,
   itemName: 'Birim',
   icon: UnitIcon,
+  defaultSortBy: 'unit_name',
 })
 
 onMounted(async () => {

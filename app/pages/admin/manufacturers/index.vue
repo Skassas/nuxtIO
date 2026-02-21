@@ -94,10 +94,11 @@ const {
   handleDelete,
 } = useCrud<Manufacturer>({
   endpoint: 'manufacturers',
-  defaultForm: { company: '', owner: '', phone: '', tax_office: '', tax_id: '', adress: '' },
+  defaultForm: { manufacturer_company: '', manufacturer_owner: '', manufacturer_phone: '', manufacturer_tax_office: '', manufacturer_tax_id: '', manufacturer_address: '' },
   validationSchema: manufacturerSchema,
   itemName: 'Üretici',
   icon: ManufacturerIcon,
+  defaultSortBy: 'manufacturer_company',
 })
 
 onMounted(async () => {

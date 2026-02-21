@@ -26,42 +26,42 @@
     <div v-if="form.customer_type === 'individual'" class="space-y-4">
       <div>
         <label class="mb-1 block text-sm font-medium text-gray-700 dark:text-gray-300">TC Kimlik No <span class="text-red-500">*</span></label>
-        <input :value="tcknInput.inputValue.value" @input="(e) => { tcknInput.handleInput(e); form.tckn = tcknInput.inputValue.value }" @keydown="tcknInput.handleKeyDown" type="text" required minlength="11" maxlength="11" placeholder="TC Kimlik No girin"
+        <input :value="customer_tcknInput.inputValue.value" @input="(e) => { customer_tcknInput.handleInput(e); form.customer_tckn = customer_tcknInput.inputValue.value }" @keydown="customer_tcknInput.handleKeyDown" type="text" required minlength="11" maxlength="11" placeholder="TC Kimlik No girin"
           class="w-full rounded-lg border border-gray-300 px-4 py-2 text-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white"
-          :class="errors?.tckn ? 'border-red-500' : ''" />
-        <p v-if="errors?.tckn" class="mt-1 text-xs text-red-500">{{ errors.tckn }}</p>
+          :class="errors?.customer_tckn ? 'border-red-500' : ''" />
+        <p v-if="errors?.customer_tckn" class="mt-1 text-xs text-red-500">{{ errors.customer_tckn }}</p>
       </div>
       <div>
         <label class="mb-1 block text-sm font-medium text-gray-700 dark:text-gray-300">Adı <span class="text-red-500">*</span></label>
-        <input :value="firstNameInput.inputValue.value" @input="(e) => { firstNameInput.handleInput(e); form.first_name = firstNameInput.inputValue.value }" @keydown="firstNameInput.handleKeyDown" type="text" required placeholder="Adı girin"
+        <input :value="firstNameInput.inputValue.value" @input="(e) => { firstNameInput.handleInput(e); form.customer_first_name = firstNameInput.inputValue.value }" @keydown="firstNameInput.handleKeyDown" type="text" required placeholder="Adı girin"
           class="w-full rounded-lg border border-gray-300 px-4 py-2 text-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white"
-          :class="errors?.first_name ? 'border-red-500' : ''" />
-        <p v-if="errors?.first_name" class="mt-1 text-xs text-red-500">{{ errors.first_name }}</p>
+          :class="errors?.customer_first_name ? 'border-red-500' : ''" />
+        <p v-if="errors?.customer_first_name" class="mt-1 text-xs text-red-500">{{ errors.customer_first_name }}</p>
       </div>
       <div>
         <label class="mb-1 block text-sm font-medium text-gray-700 dark:text-gray-300">Soyadı <span class="text-red-500">*</span></label>
-        <input :value="lastNameInput.inputValue.value" @input="(e) => { lastNameInput.handleInput(e); form.last_name = lastNameInput.inputValue.value }" @keydown="lastNameInput.handleKeyDown" type="text" required placeholder="Soyadı girin"
+        <input :value="lastNameInput.inputValue.value" @input="(e) => { lastNameInput.handleInput(e); form.customer_last_name = lastNameInput.inputValue.value }" @keydown="lastNameInput.handleKeyDown" type="text" required placeholder="Soyadı girin"
           class="w-full rounded-lg border border-gray-300 px-4 py-2 text-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white"
-          :class="errors?.last_name ? 'border-red-500' : ''" />
-        <p v-if="errors?.last_name" class="mt-1 text-xs text-red-500">{{ errors.last_name }}</p>
+          :class="errors?.customer_last_name ? 'border-red-500' : ''" />
+        <p v-if="errors?.customer_last_name" class="mt-1 text-xs text-red-500">{{ errors.customer_last_name }}</p>
       </div>
       <div>
         <label class="mb-1 block text-sm font-medium text-gray-700 dark:text-gray-300">Telefon <span class="text-red-500">*</span></label>
-        <input v-model="phoneDisplay" @input="handlePhoneInput" type="text" placeholder="(5__) ___ __ __"
+        <input v-model="customer_phoneDisplay" @input="handlePhoneInput" type="text" placeholder="(5__) ___ __ __"
           class="w-full rounded-lg border border-gray-300 px-4 py-2 text-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white"
-          :class="errors?.phone ? 'border-red-500' : ''" />
-        <p v-if="errors?.phone" class="mt-1 text-xs text-red-500">{{ errors.phone }}</p>
+          :class="errors?.customer_phone ? 'border-red-500' : ''" />
+        <p v-if="errors?.customer_phone" class="mt-1 text-xs text-red-500">{{ errors.customer_phone }}</p>
       </div>
       <div>
         <label class="mb-1 block text-sm font-medium text-gray-700 dark:text-gray-300">Fatura Adresi <span class="text-red-500">*</span></label>
-        <textarea :value="billingAddressInput.inputValue.value" @input="(e) => { billingAddressInput.handleInput(e); form.billing_address = billingAddressInput.inputValue.value }" @keydown="billingAddressInput.handleKeyDown" rows="3" placeholder="Fatura adresini girin"
+        <textarea :value="billingAddressInput.inputValue.value" @input="(e) => { billingAddressInput.handleInput(e); form.customer_billing_adress = billingAddressInput.inputValue.value }" @keydown="billingAddressInput.handleKeyDown" rows="3" placeholder="Fatura adresini girin"
           class="w-full rounded-lg border border-gray-300 px-4 py-2 text-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white"
-          :class="errors?.billing_address ? 'border-red-500' : ''"></textarea>
-        <p v-if="errors?.billing_address" class="mt-1 text-xs text-red-500">{{ errors.billing_address }}</p>
+          :class="errors?.customer_billing_adress ? 'border-red-500' : ''"></textarea>
+        <p v-if="errors?.customer_billing_adress" class="mt-1 text-xs text-red-500">{{ errors.customer_billing_adress }}</p>
       </div>
       <div>
         <label class="mb-1 block text-sm font-medium text-gray-700 dark:text-gray-300">Açıklama</label>
-        <textarea v-model="form.description" rows="3" placeholder="Açıklama girin (isteğe bağlı)"
+        <textarea v-model="form.customer_description" rows="3" placeholder="Açıklama girin (isteğe bağlı)"
           class="w-full rounded-lg border border-gray-300 px-4 py-2 text-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white"></textarea>
       </div>
     </div>
@@ -69,33 +69,33 @@
     <div v-if="form.customer_type === 'corporate'" class="space-y-4">
       <div>
         <label class="mb-1 block text-sm font-medium text-gray-700 dark:text-gray-300">Firma Adı <span class="text-red-500">*</span></label>
-        <input :value="companyNameInput.inputValue.value" @input="(e) => { companyNameInput.handleInput(e); form.company_name = companyNameInput.inputValue.value }" @keydown="companyNameInput.handleKeyDown" type="text" required placeholder="Firma adını girin"
+        <input :value="companyNameInput.inputValue.value" @input="(e) => { companyNameInput.handleInput(e); form.customer_company_name = companyNameInput.inputValue.value }" @keydown="companyNameInput.handleKeyDown" type="text" required placeholder="Firma adını girin"
           class="w-full rounded-lg border border-gray-300 px-4 py-2 text-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white"
-          :class="errors?.company_name ? 'border-red-500' : ''" />
-        <p v-if="errors?.company_name" class="mt-1 text-xs text-red-500">{{ errors.company_name }}</p>
+          :class="errors?.customer_company_name ? 'border-red-500' : ''" />
+        <p v-if="errors?.customer_company_name" class="mt-1 text-xs text-red-500">{{ errors.customer_company_name }}</p>
       </div>
       <div>
         <label class="mb-1 block text-sm font-medium text-gray-700 dark:text-gray-300">Firma Telefonu <span class="text-red-500">*</span></label>
         <input v-model="companyPhoneDisplay" @input="handleCompanyPhoneInput" type="text" placeholder="(5__) ___ __ __"
           class="w-full rounded-lg border border-gray-300 px-4 py-2 text-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white"
-          :class="errors?.company_phone ? 'border-red-500' : ''" />
-        <p v-if="errors?.company_phone" class="mt-1 text-xs text-red-500">{{ errors.company_phone }}</p>
+          :class="errors?.company_customer_phone ? 'border-red-500' : ''" />
+        <p v-if="errors?.company_customer_phone" class="mt-1 text-xs text-red-500">{{ errors.company_customer_phone }}</p>
       </div>
       <div>
         <label class="mb-1 block text-sm font-medium text-gray-700 dark:text-gray-300">Vergi Dairesi <span class="text-red-500">*</span></label>
-        <input :value="companyTaxCityInput.inputValue.value" @input="(e) => { companyTaxCityInput.handleInput(e); form.company_tax_city = companyTaxCityInput.inputValue.value }" @keydown="companyTaxCityInput.handleKeyDown" type="text" required maxlength="100" placeholder="Vergi dairesini girin"
+        <input :value="companyTaxCityInput.inputValue.value" @input="(e) => { companyTaxCityInput.handleInput(e); form.customer_company_tax_city = companyTaxCityInput.inputValue.value }" @keydown="companyTaxCityInput.handleKeyDown" type="text" required maxlength="100" placeholder="Vergi dairesini girin"
           class="w-full rounded-lg border border-gray-300 px-4 py-2 text-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white"
-          :class="errors?.company_tax_city ? 'border-red-500' : ''" />
-        <p v-if="errors?.company_tax_city" class="mt-1 text-xs text-red-500">{{ errors.company_tax_city }}</p>
+          :class="errors?.customer_company_tax_city ? 'border-red-500' : ''" />
+        <p v-if="errors?.customer_company_tax_city" class="mt-1 text-xs text-red-500">{{ errors.customer_company_tax_city }}</p>
       </div>
       <div>
         <label class="mb-1 block text-sm font-medium text-gray-700 dark:text-gray-300">Vergi Numarası <span class="text-red-500">*</span></label>
-        <input :value="companyTaxIdInput.inputValue.value" @input="(e) => { companyTaxIdInput.handleInput(e); form.company_tax_id = companyTaxIdInput.inputValue.value }" @keydown="companyTaxIdInput.handleKeyDown" type="text" required placeholder="Vergi numarasını girin"
+        <input :value="companyTaxIdInput.inputValue.value" @input="(e) => { companyTaxIdInput.handleInput(e); form.customer_company_tax_id = companyTaxIdInput.inputValue.value }" @keydown="companyTaxIdInput.handleKeyDown" type="text" required placeholder="Vergi numarasını girin"
           class="w-full rounded-lg border border-gray-300 px-4 py-2 text-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white" />
       </div>
       <div>
         <label class="mb-1 block text-sm font-medium text-gray-700 dark:text-gray-300">Açıklama</label>
-        <textarea v-model="form.company_description" rows="3" placeholder="Açıklama girin (isteğe bağlı)"
+        <textarea v-model="form.customer_company_customer_description" rows="3" placeholder="Açıklama girin (isteğe bağlı)"
           class="w-full rounded-lg border border-gray-300 px-4 py-2 text-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white"></textarea>
       </div>
     </div>
@@ -129,69 +129,69 @@ const form = computed({
   set: (value) => emit('update:modelValue', value)
 })
 
-const firstNameInput = useTurkishInput(props.modelValue.first_name || '', '')
-watch(() => form.value.first_name, (val) => {
+const firstNameInput = useTurkishInput(props.modelValue.customer_first_name || '', '')
+watch(() => form.value.customer_first_name, (val) => {
   firstNameInput.inputValue.value = val
 })
 watch(firstNameInput.inputValue, (val) => {
-  form.value.first_name = val
+  form.value.customer_first_name = val
 })
 
-const lastNameInput = useTurkishInput(props.modelValue.last_name || '', '')
-watch(() => form.value.last_name, (val) => {
+const lastNameInput = useTurkishInput(props.modelValue.customer_last_name || '', '')
+watch(() => form.value.customer_last_name, (val) => {
   lastNameInput.inputValue.value = val
 })
 watch(lastNameInput.inputValue, (val) => {
-  form.value.last_name = val
+  form.value.customer_last_name = val
 })
 
-const billingAddressInput = useTextareaInput(props.modelValue.billing_address || '')
-watch(() => form.value.billing_address, (val) => {
+const billingAddressInput = useTextareaInput(props.modelValue.customer_billing_adress || '')
+watch(() => form.value.customer_billing_adress, (val) => {
   billingAddressInput.inputValue.value = val
 })
 watch(billingAddressInput.inputValue, (val) => {
-  form.value.billing_address = val
+  form.value.customer_billing_adress = val
 })
 
-const companyNameInput = useTurkishInput(props.modelValue.company_name || '', '')
-watch(() => form.value.company_name, (val) => {
+const companyNameInput = useTurkishInput(props.modelValue.customer_company_name || '', '')
+watch(() => form.value.customer_company_name, (val) => {
   companyNameInput.inputValue.value = val
 })
 watch(companyNameInput.inputValue, (val) => {
-  form.value.company_name = val
+  form.value.customer_company_name = val
 })
 
-const companyTaxCityInput = useTurkishLettersOnly(props.modelValue.company_tax_city || '')
-watch(() => form.value.company_tax_city, (val) => {
+const companyTaxCityInput = useTurkishLettersOnly(props.modelValue.customer_company_tax_city || '')
+watch(() => form.value.customer_company_tax_city, (val) => {
   companyTaxCityInput.inputValue.value = val
 })
 watch(companyTaxCityInput.inputValue, (val) => {
-  form.value.company_tax_city = val
+  form.value.customer_company_tax_city = val
 })
 
-const tcknInput = useNumericInput(props.modelValue.tckn || '')
-watch(() => form.value.tckn, (val) => {
-  tcknInput.inputValue.value = val
+const customer_tcknInput = useNumericInput(props.modelValue.customer_tckn || '')
+watch(() => form.value.customer_tckn, (val) => {
+  customer_tcknInput.inputValue.value = val
 })
-watch(tcknInput.inputValue, (val) => {
-  form.value.tckn = val
+watch(customer_tcknInput.inputValue, (val) => {
+  form.value.customer_tckn = val
 })
 
-const companyTaxIdInput = useNumericInput(props.modelValue.company_tax_id || '')
-watch(() => form.value.company_tax_id, (val) => {
+const companyTaxIdInput = useNumericInput(props.modelValue.customer_company_tax_id || '')
+watch(() => form.value.customer_company_tax_id, (val) => {
   companyTaxIdInput.inputValue.value = val
 })
 watch(companyTaxIdInput.inputValue, (val) => {
-  form.value.company_tax_id = val
+  form.value.customer_company_tax_id = val
 })
 
-const phoneDisplay = ref(props.modelValue.phone || '')
-const companyPhoneDisplay = ref(props.modelValue.company_phone || '')
+const customer_phoneDisplay = ref(props.modelValue.customer_phone || '')
+const companyPhoneDisplay = ref(props.modelValue.company_customer_phone || '')
 
-watch(() => props.modelValue.phone, (val) => {
-  if (!val) phoneDisplay.value = ''
+watch(() => props.modelValue.customer_phone, (val) => {
+  if (!val) customer_phoneDisplay.value = ''
 })
-watch(() => props.modelValue.company_phone, (val) => {
+watch(() => props.modelValue.company_customer_phone, (val) => {
   if (!val) companyPhoneDisplay.value = ''
 })
 
@@ -208,8 +208,8 @@ function handlePhoneInput(e: Event) {
     formatted += value[i]
   }
   
-  phoneDisplay.value = formatted
-  form.value.phone = value
+  customer_phoneDisplay.value = formatted
+  form.value.customer_phone = value
 }
 
 function handleCompanyPhoneInput(e: Event) {
@@ -226,6 +226,6 @@ function handleCompanyPhoneInput(e: Event) {
   }
   
   companyPhoneDisplay.value = formatted
-  form.value.company_phone = value
+  form.value.company_customer_phone = value
 }
 </script>

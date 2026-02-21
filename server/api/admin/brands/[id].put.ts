@@ -35,16 +35,16 @@ export default defineEventHandler(async (event) => {
     })
   }
 
-  const nameField = formData.find(f => f.name === 'name')
+  const nameField = formData.find(f => f.name === 'brand_name')
   const name = nameField?.value ? nameField.value : (nameField?.data ? Buffer.from(nameField.data).toString('utf-8') : undefined)
-  const descriptionField = formData.find(f => f.name === 'description')
+  const descriptionField = formData.find(f => f.name === 'brand_description')
   const description = descriptionField?.value ? descriptionField.value : (descriptionField?.data ? Buffer.from(descriptionField.data).toString('utf-8') : undefined)
   const image = formData.find(f => f.name === 'image')
   const imageId = formData.find(f => f.name === 'image_id')
 
   const formDataParsed = {
-    name: name?.trim() || '',
-    description: description?.trim() || '',
+    brand_name: name?.trim() || '',
+    brand_description: description?.trim() || '',
     image: '',
   }
 
@@ -62,8 +62,8 @@ export default defineEventHandler(async (event) => {
 
   try {
     const data: Record<string, any> = {
-      name: name?.trim(),
-      description: description?.trim() || '',
+      brand_name: name?.trim(),
+      brand_description: description?.trim() || '',
       search_index: searchIndex,
     }
 

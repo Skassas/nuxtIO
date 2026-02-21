@@ -12,19 +12,19 @@
     <div v-if="customer?.customer_type === 'individual'" class="space-y-4">
       <div class="pb-3 border-b border-gray-200 dark:border-gray-700">
         <label class="text-sm font-medium text-blue-600 dark:text-blue-400">TC Kimlik No</label>
-        <p class="mt-1 text-gray-800 dark:text-white">{{ customer?.tckn || '-' }}</p>
+        <p class="mt-1 text-gray-800 dark:text-white">{{ customer?.customer_tckn || '-' }}</p>
       </div>
       <div class="pb-3 border-b border-gray-200 dark:border-gray-700">
         <label class="text-sm font-medium text-blue-600 dark:text-blue-400">Ad Soyad</label>
-        <p class="mt-1 text-gray-800 dark:text-white">{{ customer?.first_name }} {{ customer?.last_name }}</p>
+        <p class="mt-1 text-gray-800 dark:text-white">{{ customer?.customer_first_name }} {{ customer?.customer_last_name }}</p>
       </div>
       <div class="pb-3 border-b border-gray-200 dark:border-gray-700">
         <label class="text-sm font-medium text-blue-600 dark:text-blue-400">Telefon</label>
-        <p class="mt-1 text-gray-800 dark:text-white">{{ formatPhone(customer?.phone) }}</p>
+        <p class="mt-1 text-gray-800 dark:text-white">{{ formatPhone(customer?.customer_phone) }}</p>
       </div>
       <div class="pb-3 border-b border-gray-200 dark:border-gray-700">
         <label class="text-sm font-medium text-blue-600 dark:text-blue-400">Fatura Adresi</label>
-        <p class="mt-1 text-gray-800 dark:text-white">{{ customer?.billing_address || '-' }}</p>
+        <p class="mt-1 text-gray-800 dark:text-white">{{ customer?.customer_billing_adress || '-' }}</p>
       </div>
       <div class="pb-3 border-b border-gray-200 dark:border-gray-700">
         <label class="text-sm font-medium text-blue-600 dark:text-blue-400">Ev Adresi</label>
@@ -32,30 +32,30 @@
       </div>
       <div>
         <label class="text-sm font-medium text-blue-600 dark:text-blue-400">Açıklama</label>
-        <p class="mt-1 text-gray-800 dark:text-white">{{ customer?.description || '-' }}</p>
+        <p class="mt-1 text-gray-800 dark:text-white">{{ customer?.customer_description || '-' }}</p>
       </div>
     </div>
 
     <div v-if="customer?.customer_type === 'corporate'" class="space-y-4">
       <div class="pb-3 border-b border-gray-200 dark:border-gray-700">
         <label class="text-sm font-medium text-blue-600 dark:text-blue-400">Firma Adı</label>
-        <p class="mt-1 text-gray-800 dark:text-white">{{ customer?.company_name }}</p>
+        <p class="mt-1 text-gray-800 dark:text-white">{{ customer?.customer_company_name }}</p>
       </div>
       <div class="pb-3 border-b border-gray-200 dark:border-gray-700">
         <label class="text-sm font-medium text-blue-600 dark:text-blue-400">Telefon</label>
-        <p class="mt-1 text-gray-800 dark:text-white">{{ formatPhone(customer?.company_phone) }}</p>
+        <p class="mt-1 text-gray-800 dark:text-white">{{ formatPhone(customer?.company_customer_phone) }}</p>
       </div>
       <div class="pb-3 border-b border-gray-200 dark:border-gray-700">
         <label class="text-sm font-medium text-blue-600 dark:text-blue-400">Vergi Dairesi</label>
-        <p class="mt-1 text-gray-800 dark:text-white">{{ customer?.company_tax_city || '-' }}</p>
+        <p class="mt-1 text-gray-800 dark:text-white">{{ customer?.customer_company_tax_city || '-' }}</p>
       </div>
       <div class="pb-3 border-b border-gray-200 dark:border-gray-700">
         <label class="text-sm font-medium text-blue-600 dark:text-blue-400">Vergi Numarası</label>
-        <p class="mt-1 text-gray-800 dark:text-white">{{ customer?.company_tax_id || '-' }}</p>
+        <p class="mt-1 text-gray-800 dark:text-white">{{ customer?.customer_company_tax_id || '-' }}</p>
       </div>
       <div>
         <label class="text-sm font-medium text-blue-600 dark:text-blue-400">Açıklama</label>
-        <p class="mt-1 text-gray-800 dark:text-white">{{ customer?.company_description || '-' }}</p>
+        <p class="mt-1 text-gray-800 dark:text-white">{{ customer?.company_customer_description || '-' }}</p>
       </div>
     </div>
   </div>
@@ -65,30 +65,30 @@
 export interface Customer {
   id: string
   customer_type: 'individual' | 'corporate'
-  tckn: string
-  first_name: string
-  last_name: string
-  phone: string
-  billing_address: string
+  customer_tckn: string
+  customer_first_name: string
+  customer_last_name: string
+  customer_phone: string
+  customer_billing_adress: string
   home_address: string
-  description: string
-  company_name: string
-  company_phone: string
-  company_tax_city: string
-  company_tax_id: string
-  company_description: string
+  customer_description: string
+  customer_company_name: string
+  company_customer_phone: string
+  customer_company_tax_city: string
+  customer_company_tax_id: string
+  company_customer_description: string
 }
 
 defineProps<{
   customer: Customer | null
 }>()
 
-function formatPhone(phone?: string) {
-  if (!phone) return '-'
-  const cleaned = phone.replace(/\D/g, '').slice(0, 10)
+function formatPhone(customer_phone?: string) {
+  if (!customer_phone) return '-'
+  const cleaned = customer_phone.replace(/\D/g, '').slice(0, 10)
   if (cleaned.length === 10) {
     return `(${cleaned.slice(0, 3)}) ${cleaned.slice(3, 6)} ${cleaned.slice(6, 8)} ${cleaned.slice(8, 10)}`
   }
-  return phone
+  return customer_phone
 }
 </script>

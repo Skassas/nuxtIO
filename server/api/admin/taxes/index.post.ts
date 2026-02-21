@@ -30,14 +30,14 @@ export default defineEventHandler(async (event) => {
     })
   }
 
-  const name = body.name?.trim() || ''
+  const name = body.tax_name?.trim() || ''
   const searchIndex = normalizeForSearch(name)
 
   try {
     const record = await pb.collection('taxes').create({
-      name: name,
-      ratio: body.ratio?.trim() || '',
-      description: body.description?.trim() || '',
+      tax_name: name,
+      tax_ratio: body.tax_ratio?.trim() || '',
+      tax_description: body.tax_description?.trim() || '',
       search_index: searchIndex,
     })
     return record

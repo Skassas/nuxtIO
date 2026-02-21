@@ -66,8 +66,8 @@ import { useCrud } from '~/composables/useCrud'
 definePageMeta({ layout: 'admin' })
 
 interface BrandForm {
-  name: string
-  description: string
+  brand_name: string
+  brand_description: string
   image: string | File
 }
 
@@ -100,18 +100,19 @@ const {
   handleDelete,
 } = useCrud<BrandForm & Brand>({
   endpoint: 'brands',
-  defaultForm: { name: '', description: '', image: '' },
+  defaultForm: { brand_name: '', brand_description: '', image: '' },
   validationSchema: brandSchema,
   itemName: 'Marka',
   icon: BrandIcon,
+  defaultSortBy: 'brand_name',
 })
 
 async function handleBrandSubmit() {
   const isNewFile = form.value.image instanceof File
   if (drawerMode.value === 'create') {
     const body = new FormData()
-    body.append('name', form.value.name.trim())
-    if (form.value.description) body.append('description', form.value.description.trim())
+    body.append('brand_name', form.value.brand_name.trim())
+    if (form.value.brand_description) body.append('brand_description', form.value.brand_description.trim())
     if (form.value.image) {
       if (isNewFile) {
         body.append('image', form.value.image)
@@ -122,8 +123,8 @@ async function handleBrandSubmit() {
     await handleSubmit(body)
   } else if (drawerMode.value === 'edit') {
     const body = new FormData()
-    body.append('name', form.value.name.trim())
-    if (form.value.description) body.append('description', form.value.description.trim())
+    body.append('brand_name', form.value.brand_name.trim())
+    if (form.value.brand_description) body.append('brand_description', form.value.brand_description.trim())
     if (form.value.image) {
       if (isNewFile) {
         body.append('image', form.value.image)

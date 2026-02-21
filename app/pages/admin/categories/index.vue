@@ -68,11 +68,11 @@ const { addToast } = useToast()
 definePageMeta({ layout: 'admin' })
 
 interface CategoryForm {
-  name: string
-  description: string
+  category_name: string
+  category_description: string
   parent: string
-  image: string | File
-  status: boolean
+  category_image: string | File
+  category_status: boolean
 }
 
 const {
@@ -104,14 +104,14 @@ const {
   handleDelete: handleDeleteBase,
 } = useCrud<CategoryForm & Category>({
   endpoint: 'categories',
-  defaultForm: { name: '', description: '', parent: '', image: '', status: true },
+  defaultForm: { category_name: '', category_description: '', parent: '', category_image: '', category_status: true },
   validationSchema: categorySchema,
   itemName: 'Kategori',
   icon: CategoryIcon,
 })
 
 // Varsayılan sıralama: A-Z (ascending)
-sortBy.value = 'name'
+sortBy.value = 'category_name'
 sortOrder.value = 'asc'
 
 // Custom delete handler with children check
@@ -148,7 +148,7 @@ async function fetchAllCategories() {
 
 const availableCategories = computed(() => {
   const categories = allCategories.value.length > 0 ? allCategories.value : items.value
-  const result: { id: string; name: string; level: number; isLast: boolean; parentIds: string[] }[] = []
+  const result: { id: string; category_name: string; level: number; isLast: boolean; parentIds: string[] }[] = []
   const visited = new Set<string>()
   
   const addCategoryAndChildren = (category: any, level: number, isLast: boolean, parentIds: string[]) => {
@@ -158,7 +158,7 @@ const availableCategories = computed(() => {
     
     result.push({
       id: category.id,
-      name: category.name,
+      category_name: category.category_name,
       level,
       isLast,
       parentIds: [...parentIds]
@@ -166,7 +166,7 @@ const availableCategories = computed(() => {
     
     const children = categories
       .filter(c => c.parent === category.id)
-      .sort((a, b) => a.name.localeCompare(b.name, 'tr'))
+      .sort((a, b) => a.category_name.localeCompare(b.category_name, 'tr'))
     children.forEach((child, index) => {
       const isLastChild = index === children.length - 1
       addCategoryAndChildren(child, level + 1, isLastChild, [...parentIds, category.id])
@@ -175,7 +175,7 @@ const availableCategories = computed(() => {
   
   const rootCategories = categories
     .filter(c => !c.parent || c.parent === '')
-    .sort((a, b) => a.name.localeCompare(b.name, 'tr'))
+    .sort((a, b) => a.category_name.localeCompare(b.category_name, 'tr'))
   rootCategories.forEach((category, index) => {
     const isLastRoot = index === rootCategories.length - 1
     addCategoryAndChildren(category, 0, isLastRoot, [])
@@ -195,36 +195,36 @@ async function openEditDrawer(item: CategoryForm & Category) {
 }
 
 async function handleCategorySubmit() {
-  const isNewFile = form.value.image instanceof File
+  const isNewFile = form.value.category_image instanceof File
   if (drawerMode.value === 'create') {
     const body = new FormData()
-    body.append('name', form.value.name.trim())
-    if (form.value.description) body.append('description', form.value.description.trim())
+    body.append('category_name', form.value.category_name.trim())
+    if (form.value.category_description) body.append('category_description', form.value.category_description.trim())
     if (form.value.parent) body.append('parent', form.value.parent)
-    body.append('status', form.value.status.toString())
-    if (form.value.image) {
+    body.append('category_status', form.value.category_status.toString())
+    if (form.value.category_image) {
       if (isNewFile) {
-        body.append('image', form.value.image)
+        body.append('category_image', form.value.category_image)
       } else {
-        body.append('image_id', form.value.image)
+        body.append('image_id', form.value.category_image)
       }
     }
     await handleSubmit(body)
     await fetchAllCategories()
   } else if (drawerMode.value === 'edit') {
     const body = new FormData()
-    body.append('name', form.value.name.trim())
-    if (form.value.description) body.append('description', form.value.description.trim())
+    body.append('category_name', form.value.category_name.trim())
+    if (form.value.category_description) body.append('category_description', form.value.category_description.trim())
     if (form.value.parent) body.append('parent', form.value.parent)
-    body.append('status', form.value.status.toString())
-    if (form.value.image) {
+    body.append('category_status', form.value.category_status.toString())
+    if (form.value.category_image) {
       if (isNewFile) {
-        body.append('image', form.value.image)
+        body.append('category_image', form.value.category_image)
       } else {
-        body.append('image_id', form.value.image)
+        body.append('image_id', form.value.category_image)
       }
     } else {
-      body.append('image', 'null')
+      body.append('category_image', 'null')
     }
     await handleSubmit(body)
     await fetchAllCategories()
@@ -234,14 +234,14 @@ async function handleCategorySubmit() {
 async function handleToggleStatus(category: Category) {
   try {
     const body = new FormData()
-    body.append('name', category.name)
-    body.append('description', category.description || '')
+    body.append('category_name', category.category_name)
+    body.append('category_description', category.category_description || '')
     body.append('parent', category.parent || '')
-    body.append('status', (!category.status).toString())
-    if (category.image) {
-      body.append('image_id', category.image)
+    body.append('category_status', (!category.category_status).toString())
+    if (category.category_image) {
+      body.append('image_id', category.category_image)
     } else {
-      body.append('image', 'null')
+      body.append('category_image', 'null')
     }
     
     await $fetch(`/api/admin/categories/${category.id}`, {
@@ -272,17 +272,17 @@ const hierarchicalCategories = computed(() => {
   if (searchQuery.value.trim()) {
     return categories.map((c: any) => ({
       id: c.id,
-      name: c.name,
+      category_name: c.category_name,
       parent: c.parent,
-      image: c.image,
-      status: c.status,
+      category_image: c.category_image,
+      category_status: c.category_status,
       level: 0,
       isLast: true,
       parentIds: []
     }))
   }
   
-  const result: { id: string; name: string; parent: string; image: string; status: boolean; level: number; isLast: boolean; parentIds: string[] }[] = []
+  const result: { id: string; category_name: string; parent: string; category_image: string; category_status: boolean; level: number; isLast: boolean; parentIds: string[] }[] = []
   const visited = new Set<string>()
   
   const addCategoryAndChildren = (category: any, level: number, isLast: boolean, parentIds: string[]) => {
@@ -291,10 +291,10 @@ const hierarchicalCategories = computed(() => {
     
     result.push({
       id: category.id,
-      name: category.name,
+      category_name: category.category_name,
       parent: category.parent,
-      image: category.image,
-      status: category.status,
+      category_image: category.category_image,
+      category_status: category.category_status,
       level,
       isLast,
       parentIds: [...parentIds]
@@ -302,7 +302,7 @@ const hierarchicalCategories = computed(() => {
     
     const children = categories
       .filter(c => c.parent === category.id)
-      .sort((a, b) => a.name.localeCompare(b.name, 'tr'))
+      .sort((a, b) => a.category_name.localeCompare(b.category_name, 'tr'))
     children.forEach((child, index) => {
       const isLastChild = index === children.length - 1
       addCategoryAndChildren(child, level + 1, isLastChild, [...parentIds, category.id])
@@ -311,7 +311,7 @@ const hierarchicalCategories = computed(() => {
   
   const rootCategories = categories
     .filter(c => !c.parent || c.parent === '')
-    .sort((a, b) => a.name.localeCompare(b.name, 'tr'))
+    .sort((a, b) => a.category_name.localeCompare(b.category_name, 'tr'))
   rootCategories.forEach((category, index) => {
     const isLastRoot = index === rootCategories.length - 1
     addCategoryAndChildren(category, 0, isLastRoot, [])
@@ -321,10 +321,10 @@ const hierarchicalCategories = computed(() => {
     if (!visited.has(category.id)) {
       result.push({
         id: category.id,
-        name: category.name,
+        category_name: category.category_name,
         parent: category.parent,
-        image: category.image,
-        status: category.status,
+        category_image: category.category_image,
+        category_status: category.category_status,
         level: 0,
         isLast: true,
         parentIds: []

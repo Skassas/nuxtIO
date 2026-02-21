@@ -3,21 +3,21 @@
     <table class="w-full text-left text-sm">
       <thead class="bg-gray-50 dark:bg-gray-700">
         <tr>
-          <th class="px-4 py-4 font-semibold text-gray-800 dark:text-gray-200 w-16 uppercase text-xs text-center">Sıra</th>
-          <th class="px-4 py-4 font-semibold text-gray-800 dark:text-gray-200 uppercase text-xs align-middle" @click="$emit('sort', 'company')">
+          <th class="px-4 py-4 font-semibold text-gray-800 dark:text-gray-200 w-16 uppercase text-xs text-center hidden md:table-cell">Sıra</th>
+          <th class="px-4 py-4 font-semibold text-gray-800 dark:text-gray-200 uppercase text-xs align-middle" @click="$emit('sort', 'manufacturer_company')">
             <span class="inline-flex items-center gap-1 cursor-pointer hover:text-blue-600 dark:hover:text-blue-400">
-              <SortIcon :active="sortBy === 'company'" :direction="sortBy === 'company' ? sortOrder : null" class="w-4 h-4" />
+              <SortIcon :active="sortBy === 'manufacturer_company'" :direction="sortBy === 'manufacturer_company' ? sortOrder : null" class="w-4 h-4" />
               <span>Firma Adı</span>
             </span>
           </th>
-          <th class="px-4 py-4 font-semibold text-gray-800 dark:text-gray-200 uppercase text-xs align-middle" @click="$emit('sort', 'owner')">
+          <th class="px-4 py-4 font-semibold text-gray-800 dark:text-gray-200 uppercase text-xs align-middle hidden md:table-cell" @click="$emit('sort', 'manufacturer_owner')">
             <span class="inline-flex items-center gap-1 cursor-pointer hover:text-blue-600 dark:hover:text-blue-400">
-              <SortIcon :active="sortBy === 'owner'" :direction="sortBy === 'owner' ? sortOrder : null" class="w-4 h-4" />
+              <SortIcon :active="sortBy === 'manufacturer_owner'" :direction="sortBy === 'manufacturer_owner' ? sortOrder : null" class="w-4 h-4" />
               <span>Yetkili Kişi</span>
             </span>
           </th>
-          <th class="px-4 py-4 font-semibold text-gray-800 dark:text-gray-200 uppercase text-xs">Telefon</th>
-          <th class="px-4 py-4 font-semibold text-gray-800 dark:text-gray-200 w-40 text-center uppercase text-xs"></th>
+          <th class="px-4 py-4 font-semibold text-gray-800 dark:text-gray-200 uppercase text-xs hidden md:table-cell">Telefon</th>
+          <th class="px-4 py-4 font-semibold text-gray-800 dark:text-gray-200 w-40 text-center uppercase text-xs bg-transparent"></th>
         </tr>
       </thead>
       <tbody class="divide-y divide-gray-200 dark:divide-gray-700">
@@ -28,15 +28,15 @@
           <td colspan="5" class="px-4 py-8 text-gray-500 dark:text-gray-400">Üretici bulunamadı</td>
         </tr>
         <tr v-for="(manufacturer, index) in manufacturers" :key="manufacturer.id" class="hover:bg-gray-100 dark:hover:bg-gray-700">
-          <td class="px-4 py-1 text-gray-700 dark:text-gray-300 text-center">{{ (currentPage - 1) * perPage + index + 1 }}</td>
-          <td class="px-4 py-1 text-gray-800 dark:text-white">{{ manufacturer.company }}</td>
-          <td class="px-4 py-1 text-gray-600 dark:text-gray-400">{{ manufacturer.owner || '-' }}</td>
-          <td class="px-4 py-1 text-gray-600 dark:text-gray-400">{{ formatPhone(manufacturer.phone) }}</td>
+          <td class="px-4 py-1 text-gray-700 dark:text-gray-300 text-center hidden md:table-cell">{{ (currentPage - 1) * perPage + index + 1 }}</td>
+          <td class="px-4 py-1 text-gray-800 dark:text-white">{{ manufacturer.manufacturer_company }}</td>
+          <td class="px-4 py-1 text-gray-600 dark:text-gray-400 hidden md:table-cell">{{ manufacturer.manufacturer_owner || '-' }}</td>
+          <td class="px-4 py-1 text-gray-600 dark:text-gray-400 hidden md:table-cell">{{ formatPhone(manufacturer.manufacturer_phone) }}</td>
           <td class="px-4 py-1">
             <div class="flex items-center justify-center gap-1">
               <ViewButton @click="$emit('view', manufacturer)" />
               <EditButton @click="$emit('edit', manufacturer)" />
-              <DeleteButton :item-id="manufacturer.id" :item-name="manufacturer.company" :on-delete="(id) => $emit('delete', id)" />
+              <DeleteButton :item-id="manufacturer.id" :item-name="manufacturer.manufacturer_company" :on-delete="(id) => $emit('delete', id)" />
             </div>
           </td>
         </tr>
@@ -65,12 +65,12 @@ import SortIcon from '~/assets/svg/SortIcon.vue'
 
 export interface Manufacturer {
   id: string
-  company: string
-  owner: string
-  phone: string
-  tax_office: string
-  tax_id: string
-  adress: string
+  manufacturer_company: string
+  manufacturer_owner: string
+  manufacturer_phone: string
+  manufacturer_tax_office: string
+  manufacturer_tax_id: string
+  manufacturer_address: string
   created: string
   updated: string
 }
@@ -95,12 +95,12 @@ defineEmits<{
   sort: [field: string]
 }>()
 
-function formatPhone(phone?: string) {
-  if (!phone) return '-'
-  const cleaned = phone.replace(/\D/g, '').slice(0, 10)
+function formatPhone(manufacturer_phone?: string) {
+  if (!manufacturer_phone) return '-'
+  const cleaned = manufacturer_phone.replace(/\D/g, '').slice(0, 10)
   if (cleaned.length === 10) {
     return `(${cleaned.slice(0, 3)}) ${cleaned.slice(3, 6)} ${cleaned.slice(6, 8)} ${cleaned.slice(8, 10)}`
   }
-  return phone
+  return manufacturer_phone
 }
 </script>

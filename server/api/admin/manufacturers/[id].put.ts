@@ -38,21 +38,21 @@ export default defineEventHandler(async (event) => {
     })
   }
 
-  const company = body.company?.trim() || ''
-  const owner = body.owner?.trim() || ''
-  const phone = body.phone?.trim() || ''
+  const company = body.manufacturer_company?.trim() || ''
+  const owner = body.manufacturer_owner?.trim() || ''
+  const phone = body.manufacturer_phone?.trim() || ''
   
   const searchText = [company, owner, phone].filter(Boolean).join(' ')
   const searchIndex = normalizeForSearch(searchText)
 
   try {
     const record = await pb.collection('manufacturers').update(id, {
-      company: company,
-      owner: owner,
-      phone: phone,
-      tax_office: body.tax_office?.trim() || '',
-      tax_id: body.tax_id?.trim() || '',
-      adress: body.adress?.trim() || '',
+      manufacturer_company: company,
+      manufacturer_owner: owner,
+      manufacturer_phone: phone,
+      manufacturer_tax_office: body.manufacturer_tax_office?.trim() || '',
+      manufacturer_tax_id: body.manufacturer_tax_id?.trim() || '',
+      manufacturer_address: body.manufacturer_address?.trim() || '',
       search_index: searchIndex,
     })
     return record

@@ -3,16 +3,16 @@
     <table class="w-full text-left text-sm">
       <thead class="bg-gray-50 dark:bg-gray-700">
         <tr>
-          <th class="px-4 py-4 font-semibold text-gray-800 dark:text-gray-200 w-16 uppercase text-xs text-center">Sıra</th>
-          <th class="px-4 py-4 font-semibold text-gray-800 dark:text-gray-200 uppercase text-xs align-middle" @click="$emit('sort', 'name')">
+          <th class="px-4 py-4 font-semibold text-gray-800 dark:text-gray-200 w-16 uppercase text-xs text-center hidden md:table-cell">Sıra</th>
+          <th class="px-4 py-4 font-semibold text-gray-800 dark:text-gray-200 uppercase text-xs align-middle" @click="$emit('sort', 'tax_name')">
             <span class="inline-flex items-center gap-1 cursor-pointer hover:text-blue-600 dark:hover:text-blue-400">
-              <SortIcon :active="sortBy === 'name'" :direction="sortBy === 'name' ? sortOrder : null" class="w-4 h-4" />
+              <SortIcon :active="sortBy === 'tax_name'" :direction="sortBy === 'tax_name' ? sortOrder : null" class="w-4 h-4" />
               <span>Vergi Adı</span>
             </span>
           </th>
-          <th class="px-4 py-4 font-semibold text-gray-800 dark:text-gray-200 uppercase text-xs">% Veri Oranı</th>
-          <th class="px-4 py-4 font-semibold text-gray-800 dark:text-gray-200 uppercase text-xs">Açıklama</th>
-          <th class="px-4 py-4 font-semibold text-gray-800 dark:text-gray-200 w-40 text-center uppercase text-xs"></th>
+          <th class="px-4 py-4 font-semibold text-gray-800 dark:text-gray-200 uppercase text-xs hidden md:table-cell">% Veri Oranı</th>
+          <th class="px-4 py-4 font-semibold text-gray-800 dark:text-gray-200 uppercase text-xs hidden md:table-cell">Açıklama</th>
+          <th class="px-4 py-4 font-semibold text-gray-800 dark:text-gray-200 w-40 text-center uppercase text-xs bg-transparent"></th>
         </tr>
       </thead>
       <tbody class="divide-y divide-gray-200 dark:divide-gray-700">
@@ -23,15 +23,15 @@
           <td colspan="5" class="px-4 py-8 text-gray-500 dark:text-gray-400">Vergi bulunamadı</td>
         </tr>
         <tr v-for="(tax, index) in taxes" :key="tax.id" class="hover:bg-gray-100 dark:hover:bg-gray-700">
-          <td class="px-4 py-1 text-gray-700 dark:text-gray-300 text-center">{{ (currentPage - 1) * perPage + index + 1 }}</td>
-          <td class="px-4 py-1 text-gray-800 dark:text-white">{{ tax.name }}</td>
-          <td class="px-4 py-1 text-gray-800 dark:text-white">{{ tax.ratio }}</td>
-          <td class="px-4 py-1 text-gray-600 dark:text-gray-400">{{ tax.description || '-' }}</td>
+          <td class="px-4 py-1 text-gray-700 dark:text-gray-300 text-center hidden md:table-cell">{{ (currentPage - 1) * perPage + index + 1 }}</td>
+          <td class="px-4 py-1 text-gray-800 dark:text-white">{{ tax.tax_name }}</td>
+          <td class="px-4 py-1 text-gray-800 dark:text-white hidden md:table-cell">{{ tax.tax_ratio }}</td>
+          <td class="px-4 py-1 text-gray-600 dark:text-gray-400 hidden md:table-cell">{{ tax.tax_description || '-' }}</td>
           <td class="px-4 py-1">
             <div class="flex items-center justify-center gap-1">
               <ViewButton @click="$emit('view', tax)" />
               <EditButton @click="$emit('edit', tax)" />
-              <DeleteButton :item-id="tax.id" :item-name="tax.name" :on-delete="(id) => $emit('delete', id)" />
+              <DeleteButton :item-id="tax.id" :item-tax_name="tax.tax_name" :on-delete="(id) => $emit('delete', id)" />
             </div>
           </td>
         </tr>
@@ -60,9 +60,9 @@ import SortIcon from '~/assets/svg/SortIcon.vue'
 
 export interface Tax {
   id: string
-  name: string
-  ratio: string
-  description: string
+  tax_name: string
+  tax_ratio: string
+  tax_description: string
   created: string
   updated: string
 }

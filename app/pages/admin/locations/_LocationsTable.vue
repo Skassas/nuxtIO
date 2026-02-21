@@ -3,15 +3,15 @@
     <table class="w-full text-left text-sm">
       <thead class="bg-gray-50 dark:bg-gray-700">
         <tr>
-          <th class="px-4 py-4 font-semibold text-gray-800 dark:text-gray-200 w-16 uppercase text-xs text-center">Sıra</th>
-          <th class="px-4 py-4 font-semibold text-gray-800 dark:text-gray-200 uppercase text-xs align-middle" @click="$emit('sort', 'name')">
+          <th class="px-4 py-4 font-semibold text-gray-800 dark:text-gray-200 w-16 uppercase text-xs text-center hidden md:table-cell">Sıra</th>
+          <th class="px-4 py-4 font-semibold text-gray-800 dark:text-gray-200 uppercase text-xs align-middle" @click="$emit('sort', 'location_name')">
             <span class="inline-flex items-center gap-1 cursor-pointer hover:text-blue-600 dark:hover:text-blue-400">
-              <SortIcon :active="sortBy === 'name'" :direction="sortBy === 'name' ? sortOrder : null" class="w-4 h-4" />
+              <SortIcon :active="sortBy === 'location_name'" :direction="sortBy === 'location_name' ? sortOrder : null" class="w-4 h-4" />
               <span>Mağaza Adı</span>
             </span>
           </th>
-          <th class="px-4 py-4 font-semibold text-gray-800 dark:text-gray-200 uppercase text-xs">Açıklama</th>
-          <th class="px-4 py-4 font-semibold text-gray-800 dark:text-gray-200 w-40 text-center uppercase text-xs"></th>
+          <th class="px-4 py-4 font-semibold text-gray-800 dark:text-gray-200 uppercase text-xs hidden md:table-cell">Açıklama</th>
+          <th class="px-4 py-4 font-semibold text-gray-800 dark:text-gray-200 w-40 text-center uppercase text-xs bg-transparent"></th>
         </tr>
       </thead>
       <tbody class="divide-y divide-gray-200 dark:divide-gray-700">
@@ -22,14 +22,14 @@
           <td colspan="4" class="px-4 py-8 text-gray-500 dark:text-gray-400">Mağaza bulunamadı</td>
         </tr>
         <tr v-for="(location, index) in locations" :key="location.id" class="hover:bg-gray-100 dark:hover:bg-gray-700">
-          <td class="px-4 py-1 text-gray-700 dark:text-gray-300 text-center">{{ (currentPage - 1) * perPage + index + 1 }}</td>
-          <td class="px-4 py-1 text-gray-800 dark:text-white">{{ location.name }}</td>
-          <td class="px-4 py-1 text-gray-600 dark:text-gray-400">{{ location.description || '-' }}</td>
+          <td class="px-4 py-1 text-gray-700 dark:text-gray-300 text-center hidden md:table-cell">{{ (currentPage - 1) * perPage + index + 1 }}</td>
+          <td class="px-4 py-1 text-gray-800 dark:text-white">{{ location.location_name }}</td>
+          <td class="px-4 py-1 text-gray-600 dark:text-gray-400 hidden md:table-cell">{{ location.location_description || '-' }}</td>
           <td class="px-4 py-1">
             <div class="flex items-center justify-center gap-1">
               <ViewButton @click="$emit('view', location)" />
               <EditButton @click="$emit('edit', location)" />
-              <DeleteButton :item-id="location.id" :item-name="location.name" :on-delete="(id) => $emit('delete', id)" />
+              <DeleteButton :item-id="location.id" :item-name="location.location_name" :on-delete="(id) => $emit('delete', id)" />
             </div>
           </td>
         </tr>
@@ -58,8 +58,8 @@ import SortIcon from '~/assets/svg/SortIcon.vue'
 
 export interface Location {
   id: string
-  name: string
-  description: string
+  location_name: string
+  location_description: string
   created: string
   updated: string
 }

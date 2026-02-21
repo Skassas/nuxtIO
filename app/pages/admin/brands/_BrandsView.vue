@@ -8,11 +8,11 @@
     </div>
     <div class="pb-3 border-b border-gray-200 dark:border-gray-700">
       <label class="text-sm font-medium text-blue-600 dark:text-blue-400">Marka Adı</label>
-      <p class="mt-1 text-gray-800 dark:text-white">{{ brand?.name }}</p>
+      <p class="mt-1 text-gray-800 dark:text-white">{{ brand?.brand_name }}</p>
     </div>
     <div>
       <label class="text-sm font-medium text-blue-600 dark:text-blue-400">Açıklama</label>
-      <p class="mt-1 text-gray-800 dark:text-white">{{ brand?.description || '-' }}</p>
+      <p class="mt-1 text-gray-800 dark:text-white">{{ brand?.brand_description || '-' }}</p>
     </div>
   </div>
 </template>
@@ -22,8 +22,8 @@ import ImageIcon from '~/assets/svg/ImageIcon.vue'
 
 export interface Brand {
   id: string
-  name: string
-  description: string
+  brand_name: string
+  brand_description: string
   image: string
 }
 

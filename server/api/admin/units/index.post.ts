@@ -30,13 +30,13 @@ export default defineEventHandler(async (event) => {
     })
   }
 
-  const name = body.name?.trim() || ''
+  const name = body.unit_name?.trim() || ''
   const searchIndex = normalizeForSearch(name)
 
   try {
     const record = await pb.collection('units').create({
-      name: name,
-      description: body.description?.trim() || '',
+      unit_name: name,
+      unit_decription: body.unit_decription?.trim() || '',
       search_index: searchIndex,
     })
     return record

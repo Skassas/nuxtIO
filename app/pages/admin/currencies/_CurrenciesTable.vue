@@ -3,27 +3,27 @@
     <table class="w-full text-left text-sm">
       <thead class="bg-gray-50 dark:bg-gray-700">
         <tr>
-          <th class="px-4 py-4 font-semibold text-gray-800 dark:text-gray-200 w-16 uppercase text-xs text-center">Sıra</th>
+          <th class="px-4 py-4 font-semibold text-gray-800 dark:text-gray-200 w-16 uppercase text-xs text-center hidden md:table-cell">Sıra</th>
           <th class="px-4 py-4 font-semibold text-gray-800 dark:text-gray-200 uppercase text-xs align-middle" @click="$emit('sort', 'name')">
             <span class="inline-flex items-center gap-1 cursor-pointer hover:text-blue-600 dark:hover:text-blue-400">
               <SortIcon :active="sortBy === 'name'" :direction="sortBy === 'name' ? sortOrder : null" class="w-4 h-4" />
               <span>Para Birimi</span>
             </span>
           </th>
-          <th class="px-4 py-4 font-semibold text-gray-800 dark:text-gray-200 uppercase text-xs align-middle" @click="$emit('sort', 'currency_code')">
+          <th class="px-4 py-4 font-semibold text-gray-800 dark:text-gray-200 uppercase text-xs align-middle hidden md:table-cell" @click="$emit('sort', 'currency_code')">
             <span class="inline-flex items-center gap-1 cursor-pointer hover:text-blue-600 dark:hover:text-blue-400">
               <SortIcon :active="sortBy === 'currency_code'" :direction="sortBy === 'currency_code' ? sortOrder : null" class="w-4 h-4" />
               <span>Uluslararası Kodu</span>
             </span>
           </th>
-          <th class="px-4 py-4 font-semibold text-gray-800 dark:text-gray-200 uppercase text-xs align-middle" @click="$emit('sort', 'currency_symbol')">
+          <th class="px-4 py-4 font-semibold text-gray-800 dark:text-gray-200 uppercase text-xs align-middle hidden md:table-cell" @click="$emit('sort', 'currency_symbol')">
             <span class="inline-flex items-center gap-1 cursor-pointer hover:text-blue-600 dark:hover:text-blue-400">
               <SortIcon :active="sortBy === 'currency_symbol'" :direction="sortBy === 'currency_symbol' ? sortOrder : null" class="w-4 h-4" />
               <span>Sembolü</span>
             </span>
           </th>
-          <th class="px-4 py-4 font-semibold text-gray-800 dark:text-gray-200 uppercase text-xs">Değeri</th>
-          <th class="px-4 py-4 font-semibold text-gray-800 dark:text-gray-200 w-40 text-center uppercase text-xs"></th>
+          <th class="px-4 py-4 font-semibold text-gray-800 dark:text-gray-200 uppercase text-xs hidden md:table-cell">Değeri</th>
+          <th class="px-4 py-4 font-semibold text-gray-800 dark:text-gray-200 w-40 text-center uppercase text-xs bg-transparent"></th>
         </tr>
       </thead>
       <tbody class="divide-y divide-gray-200 dark:divide-gray-700">
@@ -34,11 +34,11 @@
           <td colspan="6" class="px-4 py-8 text-gray-500 dark:text-gray-400">Para birimi bulunamadı</td>
         </tr>
         <tr v-for="(currency, index) in currencies" :key="currency.id" class="hover:bg-gray-100 dark:hover:bg-gray-700">
-          <td class="px-4 py-1 text-gray-700 dark:text-gray-300 text-center">{{ (currentPage - 1) * perPage + index + 1 }}</td>
+          <td class="px-4 py-1 text-gray-700 dark:text-gray-300 text-center hidden md:table-cell">{{ (currentPage - 1) * perPage + index + 1 }}</td>
           <td class="px-4 py-1 text-gray-800 dark:text-white">{{ currency.currency_name }}</td>
-          <td class="px-4 py-1 text-gray-800 dark:text-white">{{ currency.currency_code }}</td>
-          <td class="px-4 py-1 text-gray-800 dark:text-white">{{ currency.currency_symbol }}</td>
-          <td class="px-4 py-1 text-gray-800 dark:text-white">₺{{ currency.currency_value }}</td>
+          <td class="px-4 py-1 text-gray-800 dark:text-white hidden md:table-cell">{{ currency.currency_code }}</td>
+          <td class="px-4 py-1 text-gray-800 dark:text-white hidden md:table-cell">{{ currency.currency_symbol }}</td>
+          <td class="px-4 py-1 text-gray-800 dark:text-white hidden md:table-cell">₺{{ currency.currency_value }}</td>
           <td class="px-4 py-1">
             <div class="flex items-center justify-center gap-1">
               <ViewButton @click="$emit('view', currency)" />
