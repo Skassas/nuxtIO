@@ -1,30 +1,43 @@
-import { createPBAdminClient } from '#server/utils/pocketbase'
+import { getConfigs, isInstalled } from '#server/utils/settings'
 
 export default defineEventHandler(async (event) => {
-  const pb = await createPBAdminClient()
-
-  try {
-    const settings = await pb.collection('settings').getList(1, 1, {
-      sort: '-created',
-    })
-    
-    if (settings.totalItems > 0) {
-      const setting = settings.items[0]
-      return {
-        installed: setting.installed,
-        companyName: setting.company_name,
-        companyPhone: setting.company_phone,
-        companyTaxPlace: setting.company_tax_place,
-        companyTaxNumber: setting.company_tax_number,
-        companyAddress: setting.company_address,
-        companyLogo: setting.company_logo,
-        functionalCurrency: setting.functional_currency,
-        reportingCurrency: setting.reporting_currency,
-      }
+  const configs = getConfigs()
+  
+  if (!isInstalled()) {
+    return {
+      installed: false,
+      pocketbaseUrl: configs.db.pocketbaseUrl,
+      companyName: '',
+      companyPhone: '',
+      companyTaxPlace: '',
+      companyTaxNumber: '',
+      companyAddress: '',
+      companyLogo: '',
+      functionalCurrency: '',
+      reportingCurrency: '',
+      profitPercent: 0,
+      profitFixedMargin: null,
+      profitFixedCurrency: '',
+      defaultTaxes: [],
+      defaultUnits: [],
     }
-    
-    return { installed: false }
-  } catch (err: any) {
-    return { installed: false }
+  }
+  
+  return {
+    installed: configs.common.installed,
+    pocketbaseUrl: configs.db.pocketbaseUrl,
+    companyName: configs.common.appName,
+    companyPhone: '',
+    companyTaxPlace: '',
+    companyTaxNumber: '',
+    companyAddress: '',
+    companyLogo: '',
+    functionalCurrency: configs.admin.functionalCurrency,
+    reportingCurrency: configs.admin.reportingCurrency,
+    profitPercent: configs.admin.profitPercent,
+    profitFixedMargin: configs.admin.profitFixedMargin,
+    profitFixedCurrency: configs.admin.profitFixedCurrency,
+    defaultTaxes: configs.admin.defaultTaxes,
+    defaultUnits: configs.admin.defaultUnits,
   }
 })

@@ -11,6 +11,11 @@ export default defineEventHandler(async (event: H3Event) => {
     return
   }
 
+  if (url.pathname === '/api/check-installed' ||
+      url.pathname === '/api/health') {
+    return
+  }
+
   if (!url.pathname.startsWith('/api/')) {
     return
   }

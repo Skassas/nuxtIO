@@ -1,0 +1,22 @@
+{
+  "db": {
+    "pocketbaseUrl": "http://127.0.0.1:8090"
+  },
+  "common": {
+    "appName": "NuxtIO",
+    "installed": false
+  },
+  "admin": {
+    "functionalCurrency": "",
+    "reportingCurrency": "",
+    "profitPercent": 0,
+    "profitFixedMargin": null,
+    "profitFixedCurrency": "",
+    "defaultTaxes": [],
+    "defaultUnits": []
+  },
+  "catalog": {
+    "currency": "",
+    "tax": ""
+  }
+}

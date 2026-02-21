@@ -1,54 +1,54 @@
-import { createPBAdminClient } from '#server/utils/pocketbase'
+import { saveConfigs, getConfigs } from '#server/utils/settings'
 
 export default defineEventHandler(async (event) => {
-  const pb = await createPBAdminClient()
   const body = await readBody(event)
+  const current = getConfigs()
+
+  // İlk kurulumda pocketbaseUrl zorunlu
+  if (!current.common.installed && !body.pocketbaseUrl) {
+    throw createError({
+      statusCode: 400,
+      data: { error: 'VALIDATION_ERROR', message: 'PocketBase URL zorunludur' },
+    })
+  }
 
   try {
-    // Mevcut settings'i kontrol et
-    const existingSettings = await pb.collection('settings').getList(1, 1, {
-      sort: '-created',
+    const updated = saveConfigs({
+      db: {
+        ...current.db,
+        pocketbaseUrl: body.pocketbaseUrl || current.db.pocketbaseUrl
+      },
+      common: {
+        ...current.common,
+        installed: true,
+        appName: body.companyName?.trim() || current.common.appName
+      },
+      admin: {
+        ...current.admin,
+        functionalCurrency: body.functionalCurrency || '',
+        reportingCurrency: body.reportingCurrency || '',
+        profitPercent: parseFloat(body.profitPercent) || 0,
+        profitFixedMargin: body.profitFixedMargin ? parseFloat(body.profitFixedMargin) : null,
+        profitFixedCurrency: body.profitFixedCurrency || '',
+        defaultTaxes: body.taxes || [],
+        defaultUnits: body.units || []
+      }
     })
-
-    let record
-    
-    if (existingSettings.totalItems > 0) {
-      // Güncelle
-      const existingId = existingSettings.items[0].id
-      record = await pb.collection('settings').update(existingId, {
-        company_name: body.companyName?.trim() || '',
-        company_phone: body.companyPhone?.trim() || '',
-        company_tax_place: body.companyTaxPlace?.trim() || '',
-        company_tax_number: body.companyTaxNumber?.trim() || '',
-        company_address: body.companyAddress?.trim() || '',
-        company_logo: body.companyLogo || '',
-        functional_currency: body.functionalCurrency || '',
-        reporting_currency: body.reportingCurrency || '',
-        installed: true,
-      })
-    } else {
-      // Oluştur
-      record = await pb.collection('settings').create({
-        company_name: body.companyName?.trim() || '',
-        company_phone: body.companyPhone?.trim() || '',
-        company_tax_place: body.companyTaxPlace?.trim() || '',
-        company_tax_number: body.companyTaxNumber?.trim() || '',
-        company_address: body.companyAddress?.trim() || '',
-        company_logo: body.companyLogo || '',
-        functional_currency: body.functionalCurrency || '',
-        reporting_currency: body.reportingCurrency || '',
-        installed: true,
-      })
-    }
 
     return {
       success: true,
-      data: record
+      data: {
+        installed: updated.common.installed,
+        pocketbaseUrl: updated.db.pocketbaseUrl,
+        companyName: updated.common.appName,
+        functionalCurrency: updated.admin.functionalCurrency,
+        reportingCurrency: updated.admin.reportingCurrency
+      }
     }
   } catch (err: any) {
     throw createError({
       statusCode: 500,
-      data: { error: 'SERVER_ERROR', message: 'Ayarlar kaydedilirken bir hata oluştu' },
+      data: { error: 'SERVER_ERROR', message: 'Ayarlar kaydedilirken bir hata oluştu: ' + err.message },
     })
   }
 })

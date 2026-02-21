@@ -5,7 +5,6 @@ export default defineNuxtConfig({
   modules: ['@nuxtjs/tailwindcss'],
 
   runtimeConfig: {
-    pocketbaseUrl: process.env.NUXT_POCKETBASE_URL,
     pocketbaseAdminEmail: process.env.POCKETBASE_ADMIN_EMAIL,
     pocketbaseAdminPassword: process.env.POCKETBASE_ADMIN_PASSWORD,
     public: {
@@ -25,7 +24,8 @@ export default defineNuxtConfig({
   },
 
   routeRules: {
-    '/admin/**': { middleware: ['auth', 'install'] },
-    '/login': { middleware: ['auth'] },
+    '/admin/**': { ssr: false },
+    '/login': { ssr: false },
+    '/install': { ssr: false },
   },
 })
